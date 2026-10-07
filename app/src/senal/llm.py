@@ -19,7 +19,7 @@ import httpx
 
 log = logging.getLogger(__name__)
 
-TIEMPO_ESPERA_SEGUNDOS = 60.0
+TIEMPO_ESPERA_SEGUNDOS = 35.0
 TEMPERATURA = 0.2
 MAX_TOKENS_SALIDA = 1500
 GEMINI_URL = "https://generativelanguage.googleapis.com/v1beta/models/{modelo}:generateContent"
@@ -74,13 +74,47 @@ class ProveedorGemini:
                 "responseMimeType": "application/json",
             },
         }
-        respuesta = httpx.post(
-            GEMINI_URL.format(modelo=self.modelo),
-            headers={"x-goog-api-key": self._clave},
-            json=cuerpo,
-            timeout=TIEMPO_ESPERA_SEGUNDOS,
-        )
-        respuesta.raise_for_status()
+        reintentos_max = 3
+        respuesta = None
+        for intento in range(reintentos_max):
+            try:
+                respuesta = httpx.post(
+                    GEMINI_URL.format(modelo=self.modelo),
+                    headers={"x-goog-api-key": self._clave},
+                    json=cuerpo,
+                    timeout=TIEMPO_ESPERA_SEGUNDOS,
+                )
+                if (
+                    respuesta.status_code in (503, 502, 504, 429)
+                    and intento < reintentos_max - 1
+                ):
+                    espera = 1.5 * (intento + 1)
+                    log.warning(
+                        "Gemini respondió con HTTP %d en intento %d/%d; reintentando en %.1fs...",
+                        respuesta.status_code,
+                        intento + 1,
+                        reintentos_max,
+                        espera,
+                    )
+                    time.sleep(espera)
+                    continue
+                respuesta.raise_for_status()
+                break
+            except (httpx.ConnectError, httpx.ReadTimeout) as exc:
+                if intento < reintentos_max - 1:
+                    espera = 1.5 * (intento + 1)
+                    log.warning(
+                        "Fallo de conexión con Gemini (%s) en intento %d/%d; reintentando en %.1fs...",
+                        type(exc).__name__,
+                        intento + 1,
+                        reintentos_max,
+                        espera,
+                    )
+                    time.sleep(espera)
+                    continue
+                raise
+
+        assert respuesta is not None
         datos = respuesta.json()
         candidatos = datos.get("candidates") or []
         if not candidatos:  # p. ej. bloqueo de seguridad: se trata como fallo del proveedor

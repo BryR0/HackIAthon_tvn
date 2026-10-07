@@ -1455,15 +1455,110 @@ nav.tvn-nav-tabs {
   border: 1px solid var(--border);
   color: var(--on-surface);
   font-size: 12px;
+  font-family: inherit;
+  line-height: 1.4;
+  cursor: pointer;
   text-decoration: none;
   transition: all 0.15s ease;
+  user-select: none;
 }
 
-.chip-consulta:hover {
+.chip-consulta:hover:not(:disabled):not(.chip-disabled) {
   background-color: var(--surface-container);
   color: var(--primary);
   text-decoration: none;
   box-shadow: var(--shadow-level1);
+}
+
+.chip-consulta:disabled,
+.chip-consulta.chip-disabled {
+  opacity: 0.45;
+  pointer-events: none;
+  cursor: not-allowed;
+  filter: grayscale(40%);
+}
+
+.chip-consulta.chip-loading {
+  background-color: var(--surface-container-high);
+  border-color: var(--secondary);
+  color: var(--primary);
+  font-weight: 600;
+  box-shadow: 0 0 0 2px rgba(0, 114, 206, 0.25);
+  animation: tvn-chip-pulse 1.4s infinite ease-in-out;
+}
+
+@keyframes tvn-chip-pulse {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.02); }
+  100% { transform: scale(1); }
+}
+
+.chip-spinner,
+.spinner-btn-inline {
+  display: inline-block;
+  width: 12px;
+  height: 12px;
+  border: 2px solid currentColor;
+  border-right-color: transparent;
+  border-radius: 50%;
+  animation: tvn-spin 0.7s linear infinite;
+  vertical-align: middle;
+}
+
+.spinner-btn-inline {
+  width: 14px;
+  height: 14px;
+  margin-right: 6px;
+}
+
+@keyframes tvn-spin {
+  to { transform: rotate(360deg); }
+}
+
+.consulta-loading-indicator {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 16px;
+  margin-top: 12px;
+  background: var(--surface-container-low);
+  border: 1px solid var(--secondary);
+  border-left: 4px solid var(--secondary);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-level1);
+  animation: tvn-fade-in 0.25s ease;
+}
+
+.consulta-spinner {
+  width: 22px;
+  height: 22px;
+  border: 2.5px solid rgba(0, 114, 206, 0.2);
+  border-top-color: var(--secondary);
+  border-radius: 50%;
+  animation: tvn-spin 0.75s linear infinite;
+  flex-shrink: 0;
+}
+
+.consulta-loading-texts {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.consulta-loading-texts .loading-title {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--primary);
+}
+
+.consulta-loading-texts .loading-sub {
+  font-size: 11px;
+  color: var(--on-surface-variant);
+}
+
+@keyframes tvn-fade-in {
+  from { opacity: 0; transform: translateY(-4px); }
+  to { opacity: 1; transform: translateY(0); }
 }
 
 /* RAG Result Workspace Layout */

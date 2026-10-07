@@ -370,6 +370,12 @@ def _redactar(
         return _Borrador(formato.modelo.model_validate_json(uso.texto), uso, True, ())
     except (ValidationError, ValueError):
         aviso = "La salida del modelo no es JSON válido del esquema; se usó la plantilla"
+    except httpx.HTTPStatusError as error:
+        codigo = error.response.status_code if error.response is not None else "error"
+        aviso = (
+            f"El proveedor {proveedor.nombre} ({proveedor.modelo}) retornó HTTP {codigo}; "
+            "se generó el borrador con la plantilla extractiva auditada."
+        )
     except (httpx.HTTPError, KeyError, IndexError, TypeError) as error:
         aviso = f"El proveedor falló ({type(error).__name__}); se usó la plantilla"
     return _Borrador(formato.extractivo(consulta, evidencias), uso, False, (aviso,))

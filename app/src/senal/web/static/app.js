@@ -184,29 +184,110 @@
       });
     });
 
-    // Indicador animado de progreso al enviar formularios
+    // Indicador animado de progreso al enviar formularios y control de doble envío
     const forms = document.querySelectorAll('form');
+    let envioEnCurso = false;
+
+    function activarEstadoCarga(form, chipActivo) {
+      if (envioEnCurso) return false;
+      envioEnCurso = true;
+
+      form.classList.add('form-submitting');
+
+      // Indicador explícito de consulta RAG si existe
+      const loadingIndicator = document.getElementById('consulta-loading-indicator');
+      if (loadingIndicator) {
+        loadingIndicator.style.display = 'flex';
+      }
+
+      // Deshabilitar todos los chips para prevenir spam de clics
+      const allChips = document.querySelectorAll('.chip-consulta');
+      allChips.forEach(function (c) {
+        c.disabled = true;
+        c.classList.add('chip-disabled');
+      });
+
+      if (chipActivo) {
+        chipActivo.classList.add('chip-loading');
+        chipActivo.innerHTML = '<span class="chip-spinner"></span> <span>Consultando...</span>';
+      }
+
+      // Botón submit
+      const submitBtn = form.querySelector('button[type="submit"]');
+      if (submitBtn) {
+        submitBtn.disabled = true;
+        const textoOriginal = submitBtn.innerHTML;
+        submitBtn.innerHTML = '<span class="spinner-btn-inline"></span> <span>Consultando...</span>';
+
+        // Restaurar en caso de cancelación o respuesta abortada tras timeout
+        setTimeout(function () {
+          envioEnCurso = false;
+          submitBtn.disabled = false;
+          submitBtn.innerHTML = textoOriginal;
+          form.classList.remove('form-submitting');
+          if (loadingIndicator) loadingIndicator.style.display = 'none';
+          allChips.forEach(function (c) {
+            c.disabled = false;
+            c.classList.remove('chip-disabled');
+            c.classList.remove('chip-loading');
+          });
+        }, 35000);
+      }
+      return true;
+    }
+
     forms.forEach(function (form) {
-      form.addEventListener('submit', function () {
-        form.classList.add('form-submitting');
-        const submitBtn = form.querySelector('button[type="submit"]');
-        if (submitBtn) {
-          submitBtn.disabled = true;
-          const textoOriginal = submitBtn.innerHTML;
-          submitBtn.innerHTML = 'Procesando... ⏳';
-          // Si el servidor tarda, restaurar por si fue cancelado
-          setTimeout(() => {
-            submitBtn.disabled = false;
-            submitBtn.innerHTML = textoOriginal;
-            form.classList.remove('form-submitting');
-          }, 15000);
+      form.addEventListener('submit', function (e) {
+        if (envioEnCurso) {
+          e.preventDefault();
+          return false;
+        }
+        activarEstadoCarga(form, null);
+      });
+    });
+
+    // Ejecución directa de pruebas rápidas en /consulta con feedback visual
+    const chipsConsulta = document.querySelectorAll('.chip-consulta[data-consulta]');
+    chipsConsulta.forEach(function (chip) {
+      chip.addEventListener('click', function (e) {
+        e.preventDefault();
+        if (envioEnCurso) return;
+
+        const form = document.querySelector('form.rag-command-card') || this.closest('form') || document.querySelector('form[action="/consulta"]');
+        if (!form) return;
+
+        const consultaTexto = this.getAttribute('data-consulta') || '';
+        const modalidad = this.getAttribute('data-modalidad') || '';
+
+        const inputConsulta = form.querySelector('input[name="q"]');
+        if (inputConsulta) {
+          inputConsulta.value = consultaTexto;
+        }
+
+        if (modalidad) {
+          let inputMod = form.querySelector('input[name="modalidad"]');
+          if (!inputMod) {
+            inputMod = document.createElement('input');
+            inputMod.type = 'hidden';
+            inputMod.name = 'modalidad';
+            form.appendChild(inputMod);
+          }
+          inputMod.value = modalidad;
+        }
+
+        if (activarEstadoCarga(form, chip)) {
+          if (typeof form.requestSubmit === 'function') {
+            form.requestSubmit();
+          } else {
+            form.submit();
+          }
         }
       });
     });
 
-    // Rellenado rápido en chips de sugerencia
-    const chips = document.querySelectorAll('[data-consulta-sugerida]');
-    chips.forEach(function (chip) {
+    // Rellenado rápido en chips de sugerencia (modales)
+    const chipsSugerida = document.querySelectorAll('[data-consulta-sugerida]');
+    chipsSugerida.forEach(function (chip) {
       chip.addEventListener('click', function (e) {
         e.preventDefault();
         const form = this.closest('form') || document;

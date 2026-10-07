@@ -77,28 +77,37 @@
 
     <div class="progress-line"><div class="progress-line-fill"></div></div>
 
+    <!-- Active Query Loading Indicator -->
+    <div id="consulta-loading-indicator" class="consulta-loading-indicator" style="display: none;" role="status">
+      <div class="consulta-spinner"></div>
+      <div class="consulta-loading-texts">
+        <strong class="loading-title">Consultando motor RAG y contrastando evidencias...</strong>
+        <span class="loading-sub">Analizando fuentes del snapshot activo y redactando con {{ llm }}. Por favor espere unos momentos.</span>
+      </div>
+    </div>
+
     <!-- Quick Suggestion Chips -->
-    <div style="display: flex; flex-direction: column; gap: 6px; margin-top: 4px;">
+    <div style="display: flex; flex-direction: column; gap: 6px; margin-top: 6px;">
       <div style="display: flex; justify-content: space-between; align-items: center; font-size: 11px; text-transform: uppercase; font-weight: 600; color: var(--on-surface-variant);">
         <span>Pruebas rápidas y temas calientes</span>
-        <span style="font-size: 10px; text-transform: none; font-weight: normal;">Haz clic para autocompletar</span>
+        <span style="font-size: 10px; text-transform: none; font-weight: 500; color: var(--outline);">Haz clic para ejecutar consulta inmediata</span>
       </div>
       <div class="chips-row">
-        <a href="/consulta?q={{ '¿Qué señales públicas del entorno logístico debo revisar?' | urlencode }}&modalidad=banca" class="chip-consulta">
-          <strong>CU-05 · Señales logísticas y SBP</strong>
-        </a>
-        <a href="/consulta?q=tránsitos del Canal de Panamá{{ am }}" class="chip-consulta">
-          <strong>Tránsitos del Canal de Panamá</strong>
-        </a>
-        <a href="/consulta?q=inflación en Panamá{{ am }}" class="chip-consulta">
-          <span>Inflación y canasta básica</span>
-        </a>
-        <a href="/consulta?q=precio del combustible y subsidios{{ am }}" class="chip-consulta">
-          <span>Precio del combustible y subsidios</span>
-        </a>
-        <a href="/consulta?q=precio del bitcoin en Japón{{ am }}" class="chip-consulta" style="color: var(--error);">
-          <span>Precio del bitcoin en Japón (Prueba de abstención)</span>
-        </a>
+        <button type="button" class="chip-consulta" data-consulta="¿Qué señales públicas del entorno logístico debo revisar?" data-modalidad="banca">
+          <span class="chip-label"><strong>CU-05 · Señales logísticas y SBP</strong></span>
+        </button>
+        <button type="button" class="chip-consulta" data-consulta="tránsitos del Canal de Panamá">
+          <span class="chip-label"><strong>Tránsitos del Canal de Panamá</strong></span>
+        </button>
+        <button type="button" class="chip-consulta" data-consulta="inflación en Panamá">
+          <span class="chip-label">Inflación y canasta básica</span>
+        </button>
+        <button type="button" class="chip-consulta" data-consulta="precio del combustible y subsidios">
+          <span class="chip-label">Precio del combustible y subsidios</span>
+        </button>
+        <button type="button" class="chip-consulta" data-consulta="precio del bitcoin en Japón" style="color: var(--error);">
+          <span class="chip-label">Precio del bitcoin en Japón (Prueba de abstención)</span>
+        </button>
       </div>
     </div>
   </form>

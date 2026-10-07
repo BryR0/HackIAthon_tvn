@@ -145,18 +145,19 @@ class Estado:
             if clave in self.consultas:
                 self.consultas.move_to_end(clave)
                 return self.consultas[clave]
-            if modalidad == "banca":
-                resultado = responder(
-                    pregunta,
-                    self.buscador_banca,
-                    self.proveedor,
-                    ids_obligatorios=ids_consulta_banca(
-                        pregunta, self.bandeja.temas, self.series_sbp
-                    ),
-                    formato=formato_banca(tema_de_consulta(pregunta)),
-                )
-            else:
-                resultado = responder(pregunta, self.buscador, self.proveedor)
+        if modalidad == "banca":
+            resultado = responder(
+                pregunta,
+                self.buscador_banca,
+                self.proveedor,
+                ids_obligatorios=ids_consulta_banca(
+                    pregunta, self.bandeja.temas, self.series_sbp
+                ),
+                formato=formato_banca(tema_de_consulta(pregunta)),
+            )
+        else:
+            resultado = responder(pregunta, self.buscador, self.proveedor)
+        with self.candado:
             self.consultas[clave] = resultado
             if len(self.consultas) > MAX_CONSULTAS_EN_CACHE:
                 self.consultas.popitem(last=False)
