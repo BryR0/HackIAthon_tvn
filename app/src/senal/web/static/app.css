@@ -92,6 +92,7 @@
 html {
   scroll-behavior: smooth;
   font-size: 16px;
+  height: 100%;
 }
 
 body {
@@ -104,6 +105,14 @@ body {
   line-height: 20px;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* El contenido principal empuja el footer hacia el fondo de la ventana */
+main.tvn-container {
+  flex: 1 0 auto;
 }
 
 /* Tabular figures for numerics & financial data */
@@ -1516,7 +1525,7 @@ nav.tvn-nav-tabs {
 }
 
 .consulta-loading-indicator {
-  display: flex;
+  display: none;
   align-items: center;
   gap: 12px;
   padding: 12px 16px;
@@ -1527,6 +1536,11 @@ nav.tvn-nav-tabs {
   border-radius: var(--radius-md);
   box-shadow: var(--shadow-level1);
   animation: tvn-fade-in 0.25s ease;
+}
+
+.form-submitting .consulta-loading-indicator,
+.consulta-loading-indicator.activo {
+  display: flex !important;
 }
 
 .consulta-spinner {

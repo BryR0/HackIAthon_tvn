@@ -4,8 +4,8 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>{% block titulo %}Señal TVN{% endblock %} · Señal TVN</title>
-  <link rel="stylesheet" href="/static/app.css?v=20261007_v5">
-  <script src="/static/app.js?v=20261007_v5" defer></script>
+  <link rel="stylesheet" href="/static/app.css?v=20261007_v7">
+  <script src="/static/app.js?v=20261007_v7" defer></script>
 </head>
 <body>
   <!-- Header Institucional  (64px) -->
@@ -107,9 +107,14 @@
   <!-- Contenido Principal -->
   <main class="tvn-container">
     {% if modalidad == 'banca' %}
-    <div class="banca-aviso" role="note" style="margin-top: 14px;">
-      <strong>Filtro de entorno bancario.</strong>
-      <span>{{ aviso_sbp }} Boletines y señales para un analista: no evalúan clientes ni bancos, no recomiendan operaciones y no son alertas regulatorias.</span>
+    <div class="banca-aviso" role="note" style="margin-top: 14px; display: flex; justify-content: space-between; align-items: center; gap: 12px;">
+      <div>
+        <strong>Filtro de entorno bancario.</strong>
+        <span>{{ aviso_sbp }} Boletines y señales para un analista: no evalúan clientes ni bancos, no recomiendan operaciones y no son alertas regulatorias.</span>
+      </div>
+      <a href="?{% if q %}q={{ q | urlencode }}{% endif %}" style="flex-shrink: 0; background: rgba(146, 64, 14, 0.12); color: var(--warning-text); border: 1px solid rgba(146, 64, 14, 0.35); border-radius: var(--radius-sm); padding: 4px 10px; font-size: 11px; font-weight: 700; text-decoration: none; display: inline-flex; align-items: center; gap: 4px;" title="Desactivar filtro bancario y volver a modo editorial">
+        <span>Quitar filtro bancario</span> &times;
+      </a>
     </div>
     {% endif %}
     {% block contenido %}{% endblock %}

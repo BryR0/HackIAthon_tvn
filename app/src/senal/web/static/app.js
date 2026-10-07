@@ -197,6 +197,7 @@
       // Indicador explícito de consulta RAG si existe
       const loadingIndicator = document.getElementById('consulta-loading-indicator');
       if (loadingIndicator) {
+        loadingIndicator.classList.add('activo');
         loadingIndicator.style.display = 'flex';
       }
 
@@ -216,25 +217,48 @@
       const submitBtn = form.querySelector('button[type="submit"]');
       if (submitBtn) {
         submitBtn.disabled = true;
-        const textoOriginal = submitBtn.innerHTML;
+        if (!submitBtn._textoOriginal) {
+          submitBtn._textoOriginal = submitBtn.innerHTML;
+        }
         submitBtn.innerHTML = '<span class="spinner-btn-inline"></span> <span>Consultando...</span>';
 
         // Restaurar en caso de cancelación o respuesta abortada tras timeout
         setTimeout(function () {
-          envioEnCurso = false;
-          submitBtn.disabled = false;
-          submitBtn.innerHTML = textoOriginal;
-          form.classList.remove('form-submitting');
-          if (loadingIndicator) loadingIndicator.style.display = 'none';
-          allChips.forEach(function (c) {
-            c.disabled = false;
-            c.classList.remove('chip-disabled');
-            c.classList.remove('chip-loading');
-          });
+          resetearEstadoCarga();
         }, 35000);
       }
       return true;
     }
+
+    function resetearEstadoCarga() {
+      envioEnCurso = false;
+      document.querySelectorAll('form').forEach(function (f) {
+        f.classList.remove('form-submitting');
+        f._chipActivo = null;
+        const submitBtn = f.querySelector('button[type="submit"]');
+        if (submitBtn && submitBtn._textoOriginal) {
+          submitBtn.disabled = false;
+          submitBtn.innerHTML = submitBtn._textoOriginal;
+        }
+      });
+
+      const loadingIndicator = document.getElementById('consulta-loading-indicator');
+      if (loadingIndicator) {
+        loadingIndicator.classList.remove('activo');
+        loadingIndicator.style.display = 'none';
+      }
+
+      const allChips = document.querySelectorAll('.chip-consulta');
+      allChips.forEach(function (c) {
+        c.disabled = false;
+        c.classList.remove('chip-disabled');
+        c.classList.remove('chip-loading');
+      });
+    }
+
+    // Asegurar que al volver atrás o cargar la página el estado esté limpio
+    resetearEstadoCarga();
+    window.addEventListener('pageshow', resetearEstadoCarga);
 
     forms.forEach(function (form) {
       form.addEventListener('submit', function (e) {
@@ -242,7 +266,7 @@
           e.preventDefault();
           return false;
         }
-        activarEstadoCarga(form, null);
+        activarEstadoCarga(form, form._chipActivo || null);
       });
     });
 
@@ -264,8 +288,8 @@
           inputConsulta.value = consultaTexto;
         }
 
+        let inputMod = form.querySelector('input[name="modalidad"]');
         if (modalidad) {
-          let inputMod = form.querySelector('input[name="modalidad"]');
           if (!inputMod) {
             inputMod = document.createElement('input');
             inputMod.type = 'hidden';
@@ -273,14 +297,17 @@
             form.appendChild(inputMod);
           }
           inputMod.value = modalidad;
+        } else if (inputMod) {
+          // Si el chip seleccionado no es del entorno bancario, removemos el filtro de banca
+          inputMod.remove();
         }
 
-        if (activarEstadoCarga(form, chip)) {
-          if (typeof form.requestSubmit === 'function') {
-            form.requestSubmit();
-          } else {
-            form.submit();
-          }
+        form._chipActivo = chip;
+        if (typeof form.requestSubmit === 'function') {
+          form.requestSubmit();
+        } else {
+          activarEstadoCarga(form, chip);
+          form.submit();
         }
       });
     });
