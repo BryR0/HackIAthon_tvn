@@ -1,0 +1,508 @@
+{% extends "base.html" %}
+{% block titulo %}Bandeja priorizada{% endblock %}
+{% block contenido %}
+
+<!-- Hero Editorial Presentation (Google  Specification) -->
+<section class="hero-banner" aria-labelledby="titulo-hero">
+  <!-- Ambient Backing Accents -->
+  <div class="hero-ambient-top"></div>
+  <div class="hero-ambient-left"></div>
+
+  <div class="hero-content">
+    <!-- Overline Tag -->
+    <div class="hero-overline">
+      <div class="hero-pill-tag">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+        </svg>
+        Reto Periodístico &middot; Señal TVN &middot; IA &amp; Reglas Auditables
+      </div>
+      <span style="color: var(--outline-variant);">&bull;</span>
+      <span style="font-size: 11px; color: var(--on-surface-variant); font-weight: 500;">
+        Algoritmo calibrado {{ bandeja.version_reglas }}
+      </span>
+    </div>
+
+    <!-- Master Headline -->
+    <h1 id="titulo-hero" class="hero-headline">
+      Sabe qué temas merecen cobertura <span class="hero-headline-accent">antes de publicar.</span>
+    </h1>
+
+    <!-- Subtitle & Formula Breakdown -->
+    <div style="display: flex; flex-direction: column; gap: 8px;">
+      <p class="hero-summary-text">
+        <strong>{{ total }} temas</strong> agrupados por evento en tiempo real, ordenados por puntaje de atención multi-variable.
+        Los empates se resuelven por mayor urgencia y luego por identificador de evento.
+      </p>
+
+      <div class="hero-formula-box">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="2" y="7" width="20" height="14" rx="2" ry="2"/>
+          <path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/>
+        </svg>
+        <span>P = 30R + 25I + 20U + 15N + 10E</span>
+        <span class="hero-formula-details">| R: Relevancia &middot; I: Impacto &middot; U: Urgencia &middot; N: Novedad &middot; E: Evidencia</span>
+      </div>
+    </div>
+
+    <!-- CTAs & Fast Actions -->
+    <div class="hero-ctas">
+      <button type="button" class="btn-primary" data-abre-modal="modal-consulta">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/>
+        </svg>
+        <span>Consultar snapshot con IA</span>
+      </button>
+
+      <button type="button" class="btn-secondary" data-abre-modal="modal-tour">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="12" cy="12" r="10"/><polygon points="10 8 16 12 10 16 10 8"/>
+        </svg>
+        <span>Ver cómo funciona (Guía rápida)</span>
+      </button>
+
+      <button type="button" class="btn-secondary" data-abre-modal="modal-formula">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/>
+        </svg>
+        <span>Desglose de fórmula</span>
+      </button>
+    </div>
+
+    <!-- Trust & Verification Ribbon -->
+    <div class="hero-trust-ribbon">
+      <div class="hero-trust-pill">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="color: var(--secondary);">
+          <circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/>
+        </svg>
+        <span>Triage editorial en segundos</span>
+      </div>
+
+      <div class="hero-trust-pill">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="color: var(--verified-emerald);">
+          <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+        </svg>
+        <span>Verificación estricta sin alucinaciones</span>
+      </div>
+
+      <div class="hero-trust-pill">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="color: var(--secondary);">
+          <circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/>
+          <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/>
+        </svg>
+        <span>Calibrado para la agenda de Panamá</span>
+      </div>
+    </div>
+
+    <!-- System Guardrails Card Split -->
+    <div class="hero-guardrails">
+      <!-- What it Does -->
+      <div class="guardrail-card">
+        <div class="guardrail-icon si">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="20 6 9 17 4 12"/>
+          </svg>
+        </div>
+        <div>
+          <span class="guardrail-title">Sí hace el sistema</span>
+          <p class="guardrail-desc">
+            Agrupa notas por evento, calcula prioridad objetiva en 5 dimensiones auditables y contrasta datos contra fuentes oficiales (<strong>Banco Mundial, INEC, USGS, ACP</strong>).
+          </p>
+        </div>
+      </div>
+
+      <!-- What it Does NOT Do -->
+      <div class="guardrail-card">
+        <div class="guardrail-icon no">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
+          </svg>
+        </div>
+        <div>
+          <span class="guardrail-title">No hace el sistema</span>
+          <p class="guardrail-desc">
+            No publica notas automáticamente sin visto bueno humano, no genera citas sintéticas y bajo ningún supuesto sustituye el criterio ético de la mesa editorial de TVN.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+{% if resumen_bandeja %}
+<!-- Panel Ejecutivo de Métricas y Dataviz de Señales -->
+<div class="dashboard-resumen-banner">
+  <!-- Tarjeta 1: Distribución por Bandas de Prioridad -->
+  <div class="dashboard-card-mini">
+    <div class="dashboard-card-header">
+      <span class="dashboard-card-title">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="color: var(--secondary);">
+          <path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/>
+        </svg>
+        Distribución de Prioridad ({{ total }} señales activas)
+      </span>
+      <span style="font-size: 11px; font-weight: 700; color: var(--on-surface-variant);">Triage Algorítmico</span>
+    </div>
+
+    <!-- Barra de progreso segmentada -->
+    <div class="bandas-distribucion-bar" title="Alta (≥70 pts): {{ resumen_bandeja.bandas.alta }} | Media (40-69 pts): {{ resumen_bandeja.bandas.media }} | Baja (<40 pts): {{ resumen_bandeja.bandas.baja }}">
+      <div class="banda-seg-alta" style="width: {{ (resumen_bandeja.bandas.alta / resumen_bandeja.total) * 100 }}%;"></div>
+      <div class="banda-seg-media" style="width: {{ (resumen_bandeja.bandas.media / resumen_bandeja.total) * 100 }}%;"></div>
+      <div class="banda-seg-baja" style="width: {{ (resumen_bandeja.bandas.baja / resumen_bandeja.total) * 100 }}%;"></div>
+    </div>
+
+    <div class="bandas-legend-grid">
+      <div class="banda-legend-item">
+        <span class="banda-legend-val" style="color: #d97706;">{{ resumen_bandeja.bandas.alta }}</span>
+        <span class="banda-legend-lbl">Alta (&ge;70)</span>
+      </div>
+      <div class="banda-legend-item">
+        <span class="banda-legend-val" style="color: #0050cc;">{{ resumen_bandeja.bandas.media }}</span>
+        <span class="banda-legend-lbl">Media (40-69)</span>
+      </div>
+      <div class="banda-legend-item">
+        <span class="banda-legend-val" style="color: #64748b;">{{ resumen_bandeja.bandas.baja }}</span>
+        <span class="banda-legend-lbl">Baja (&lt;40)</span>
+      </div>
+      <div class="banda-legend-item">
+        <span class="banda-legend-val" style="color: #b45309;">{{ resumen_bandeja.banca_count }}</span>
+        <span class="banda-legend-lbl">Banca SBP</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Tarjeta 2: Distribución por Categorías y Exposición SBP -->
+  <div class="dashboard-card-mini">
+    <div class="dashboard-card-header">
+      <span class="dashboard-card-title">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="color: #d97706;">
+          <rect x="2" y="7" width="20" height="14" rx="2" ry="2"/>
+          <path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/>
+        </svg>
+        Concentración Temática &amp; Impacto SBP
+      </span>
+      <span class="badge-seccion-banca" style="font-size: 10px; padding: 1px 7px;">
+        {{ resumen_bandeja.banca_count }} temas SBP ({{ resumen_bandeja.banca_pct }}%)
+      </span>
+    </div>
+
+    <div class="cat-bars-list">
+      {% for c in resumen_bandeja.categorias[:4] %}
+      <div class="cat-bar-item">
+        <div class="cat-bar-header">
+          <span style="color: var(--primary);">{{ c.nombre }}</span>
+          <span style="color: var(--outline); font-family: var(--font-mono);">{{ c.conteo }} notas ({{ c.pct }}%)</span>
+        </div>
+        <div class="cat-bar-track">
+          <div class="cat-bar-fill" style="width: {{ c.ancho }}%;"></div>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+</div>
+{% endif %}
+
+<!-- Wire Desk Header & Status -->
+<div class="wire-header">
+  <div class="wire-title-wrap">
+    <h2 class="wire-title">¿Qué temas merecen revisión para la agenda de Panamá?</h2>
+    <span class="wire-badge">Live Wire</span>
+  </div>
+  <div class="wire-status">
+    <span style="width: 6px; height: 6px; border-radius: 50%; background-color: var(--secondary); display: inline-block;"></span>
+    <span>Página <strong style="color: var(--primary);">{{ pagina }}</strong> de {{ ((total - 1) // por_pagina) + 1 if total > 0 else 1 }}</span>
+    <span style="color: var(--outline-variant);">&bull;</span>
+    <span>Mostrando {{ visibles | length }} de <strong style="color: var(--primary);">{{ total }} eventos</strong></span>
+  </div>
+</div>
+
+<!-- Módulo de Filtros ( Filter Bar) -->
+<form class="filter-module" method="get" action="/">
+  {% if modalidad == 'banca' %}<input type="hidden" name="modalidad" value="banca">{% endif %}
+  <div class="filter-fields-wrap">
+    <!-- Dropdown: Tema -->
+    <div class="filter-group">
+      <label class="filter-label" for="f-tema">Tema</label>
+      <select id="f-tema" name="tema" class="filter-select">
+        <option value="">Todos los temas</option>
+        {% for clave, nombre in temas_catalogo.items() %}
+        <option value="{{ clave }}" {% if filtros.tema == clave %}selected{% endif %}>{{ nombre }}</option>
+        {% endfor %}
+        <option value="sin_tema" {% if filtros.tema == 'sin_tema' %}selected{% endif %}>Sin tema claro</option>
+      </select>
+    </div>
+
+    <!-- Dropdown: Prioridad -->
+    <div class="filter-group">
+      <label class="filter-label" for="f-banda">Prioridad</label>
+      <select id="f-banda" name="banda" class="filter-select">
+        <option value="">Todas las prioridades</option>
+        {% for b in ['alto', 'medio', 'bajo'] %}
+        <option value="{{ b }}" {% if filtros.banda == b %}selected{% endif %}>{{ b | capitalize }}</option>
+        {% endfor %}
+      </select>
+    </div>
+
+    <!-- Dropdown: Evidencia -->
+    <div class="filter-group">
+      <label class="filter-label" for="f-evidencia">Evidencia &amp; Contraste</label>
+      <select id="f-evidencia" name="evidencia" class="filter-select">
+        <option value="">Cualquier evidencia</option>
+        {% for e in ['suficiente_para_borrador', 'parcial', 'insuficiente'] %}
+        <option value="{{ e }}" {% if filtros.evidencia == e %}selected{% endif %}>
+          {{ 'Suficiente para borrador' if e == 'suficiente_para_borrador' else (e | replace('_', ' ') | capitalize) }}
+        </option>
+        {% endfor %}
+      </select>
+    </div>
+
+    <!-- Input Búsqueda Rápida -->
+    <div class="filter-group filter-group-search">
+      <label class="filter-label" for="f-busqueda">Búsqueda rápida en vivo</label>
+      <div class="filter-search-box">
+        <svg class="filter-search-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
+        </svg>
+        <input id="f-busqueda" type="text" class="filter-input filter-search-input" placeholder="Filtrar por palabra clave o entidad...">
+        <kbd class="filter-search-kbd" title="Atajo para abrir consulta IA">Ctrl+K</kbd>
+      </div>
+    </div>
+  </div>
+
+  <div class="filter-actions">
+    <button type="submit" class="btn-primary">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+        <polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"/>
+      </svg>
+      <span>Filtrar</span>
+    </button>
+    {% if filtros.tema or filtros.banda or filtros.evidencia %}
+    <a href="/{{ qm }}" class="btn-secondary" title="Restablecer filtros">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"/>
+      </svg>
+      <span>Limpiar</span>
+    </a>
+    {% endif %}
+  </div>
+</form>
+
+<!-- Main Editorial Data Table ( 12-Column Grid) -->
+<div class="tvn-table-card">
+  <!-- Table Column Headers -->
+  <div class="tvn-table-header">
+    <div style="text-align: center;">Score &darr;</div>
+    <div>Tema y Evento Noticioso</div>
+    <div class="col-clasificacion">Clasificación</div>
+    <div>Evidencia &amp; Fuentes</div>
+    <div style="text-align: right;">Revisión</div>
+  </div>
+
+  <!-- Rows List -->
+  <div>
+    {% for t in visibles %}
+    <article class="tvn-row-item">
+      <!-- Score Column -->
+      <div>
+        <div class="score-badge {{ t.puntaje.banda }}" title="Banda {{ t.puntaje.banda }}: {{ '%.1f' | format(t.puntaje.total) }} pts">
+          <span class="score-val">{{ '%.1f' | format(t.puntaje.total) }}</span>
+          <span class="score-lbl">{{ t.puntaje.banda }}</span>
+        </div>
+      </div>
+
+      <!-- Content Column -->
+      <div class="item-content">
+        <a class="item-title" href="/tema/{{ t.id_evento }}{{ qm }}">
+          {{ t.titulo }}
+        </a>
+
+        <div class="item-meta-row">
+          <span style="display: inline-flex; align-items: center; gap: 4px; font-weight: 600; color: var(--primary);">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M4 11a9 9 0 0 1 9 9"/><path d="M4 4a16 16 0 0 1 16 16"/><circle cx="5" cy="19" r="1"/>
+            </svg>
+            {{ t.noticias | length }} nota(s)
+          </span>
+          <span style="color: var(--outline-variant);">&bull;</span>
+          <span>{{ t.medios | length }} medio(s)</span>
+          <span style="color: var(--outline-variant);">&bull;</span>
+          <span style="color: var(--outline);">{{ t.fecha_referencia | hora }} (Hora de Panamá)</span>
+
+          {% if t.enlaces_indicadores or t.enlaces_sismos %}
+          <span class="item-meta-chip oficial">
+            <span style="width: 5px; height: 5px; border-radius: 50%; background-color: var(--secondary);"></span>
+            Dato oficial enlazado
+          </span>
+          {% endif %}
+
+          {% if modalidad == 'banca' %}
+          {% for sector in sectores_de(t.tema) %}
+          <span class="sector-chip" title="Sector SBP potencialmente relacionado (hipótesis, {{ version_banca }})">{{ sector }}</span>
+          {% endfor %}
+          {% endif %}
+
+          {% if t.contradicciones %}
+          <span class="item-meta-chip conflicto">
+            <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+              <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/>
+              <line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/>
+            </svg>
+            Cifras en conflicto
+          </span>
+          {% endif %}
+
+          {% if t.sospechoso %}
+          <span class="item-meta-chip sospechoso">
+            Contenido sospechoso
+          </span>
+          {% endif %}
+        </div>
+      </div>
+
+      <!-- Classification Column -->
+      <div class="col-clasificacion item-category-wrap">
+        <span class="category-chip">
+          {{ temas_catalogo.get(t.tema, 'Sin tema claro') }}
+        </span>
+        {% if t.tema_baseline != t.tema %}
+        <span class="category-sub">
+          base: {{ temas_catalogo.get(t.tema_baseline, 'sin tema') }}
+        </span>
+        {% endif %}
+      </div>
+
+      <!-- Evidence Column -->
+      <div class="item-evidence-wrap">
+        <div class="evidence-status">
+          {% if t.estado_evidencia == 'suficiente_para_borrador' %}
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="color: var(--secondary);">
+            <polyline points="20 6 9 17 4 12"/>
+          </svg>
+          {% else %}
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="color: var(--outline);">
+            <circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/>
+          </svg>
+          {% endif %}
+          <span>{{ 'Suficiente p/ borrador' if t.estado_evidencia == 'suficiente_para_borrador' else (t.estado_evidencia | replace('_', ' ') | capitalize) }}</span>
+        </div>
+        <span class="evidence-detail">{{ t.procedencias }} procedencia(s) independiente(s)</span>
+      </div>
+
+      <!-- Action Column -->
+      <div class="item-action-wrap">
+        {% set est = revisiones[t.id_evento].estado if t.id_evento in revisiones else 'nuevo' %}
+        <a class="btn-revisar {% if loop.first and pagina == 1 %}destacado{% endif %}" href="/tema/{{ t.id_evento }}{{ qm }}">
+          <span>Revisar</span>
+          {% if est != 'nuevo' %}
+          <span style="font-size: 9px; opacity: 0.85;">&bull;</span>
+          {% endif %}
+        </a>
+      </div>
+    </article>
+    {% else %}
+    <div style="text-align: center; padding: 48px 16px; color: var(--outline);">
+      <p style="font-weight: 600; color: var(--primary);">No hay temas que coincidan con los filtros seleccionados.</p>
+      <a href="/{{ qm }}" class="tvn-btn-ghost" style="margin-top: 12px;">Ver todos los temas</a>
+    </div>
+    {% endfor %}
+  </div>
+
+  <!-- Pagination Section Footer -->
+  <div class="tvn-pagination-footer">
+    <div>
+      <span>Mostrando <strong style="color: var(--primary);">{{ visibles | length }}</strong> por página</span>
+      <span style="color: var(--outline-variant);">&bull;</span>
+      <span>Total <strong>{{ total }}</strong> eventos agrupados</span>
+    </div>
+
+    <div class="pagination-controls">
+      {% if pagina > 1 %}
+      <a href="?tema={{ filtros.tema | urlencode }}&banda={{ filtros.banda | urlencode }}&evidencia={{ filtros.evidencia | urlencode }}&pagina={{ pagina - 1 }}{{ am }}" class="page-btn">
+        &larr; Anterior
+      </a>
+      {% else %}
+      <span class="page-btn disabled">&larr; Anterior</span>
+      {% endif %}
+
+      <span class="page-btn active">{{ pagina }}</span>
+
+      {% if pagina * por_pagina < total %}
+      <a href="?tema={{ filtros.tema | urlencode }}&banda={{ filtros.banda | urlencode }}&evidencia={{ filtros.evidencia | urlencode }}&pagina={{ pagina + 1 }}{{ am }}" class="page-btn">
+        Siguiente &rarr;
+      </a>
+      {% else %}
+      <span class="page-btn disabled">Siguiente &rarr;</span>
+      {% endif %}
+    </div>
+  </div>
+</div>
+
+<!-- Supplemental Editorial Insight Panel ( 3 Cards) -->
+<section class="insight-grid">
+  <!-- Card 1: Triage Distribution -->
+  <div class="insight-card">
+    <div>
+      <div class="insight-card-header">
+        <span class="insight-card-tag">Distribución de Prioridad</span>
+        <span class="insight-card-badge" style="background-color: var(--secondary-fixed); color: var(--on-secondary-fixed-variant);">Hoy</span>
+      </div>
+      <h3 class="insight-stat-big">142</h3>
+      <p class="insight-desc">Temas calificados con Score &gt; 60.0 en cola editorial</p>
+    </div>
+
+    <div class="insight-progress-wrap">
+      <div class="progress-label-row">
+        <span>Economía &amp; Negocios</span>
+        <strong>54%</strong>
+      </div>
+      <div class="progress-track"><div class="progress-fill" style="width: 54%;"></div></div>
+
+      <div class="progress-label-row" style="margin-top: 4px;">
+        <span>Logística &amp; Canal de Panamá</span>
+        <strong>31%</strong>
+      </div>
+      <div class="progress-track"><div class="progress-fill" style="width: 31%; background-color: var(--primary-navy);"></div></div>
+    </div>
+  </div>
+
+  <!-- Card 2: Conflict Alerts -->
+  <div class="insight-card">
+    <div>
+      <div class="insight-card-header">
+        <span class="insight-card-tag">Alertas de Discrepancia</span>
+        <span class="insight-card-badge" style="background-color: var(--error-container); color: var(--on-error-container);">8 Alertas</span>
+      </div>
+      <h3 class="insight-stat-big" style="color: var(--error);">18 Cifras</h3>
+      <p class="insight-desc">Contradicciones detectadas entre comunicados y reportes estadísticos</p>
+    </div>
+
+    <div style="background-color: var(--surface-container-low); padding: 10px 12px; border-radius: var(--radius-lg); margin-top: 16px; border: 1px solid var(--border); font-size: 12px; display: flex; align-items: center; gap: 8px;">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="color: var(--error); flex-shrink: 0;">
+        <circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/>
+      </svg>
+      <span>Mayor discrepancia en: <strong style="color: var(--primary);">Aportes ACP 2027</strong> vs Estimación MEF.</span>
+    </div>
+  </div>
+
+  <!-- Card 3: Ingestion Stream Status -->
+  <div class="insight-card">
+    <div>
+      <div class="insight-card-header">
+        <span class="insight-card-tag">Integridad del Stream</span>
+        <span class="insight-card-badge" style="background-color: var(--surface-container); color: var(--primary-navy);">Activo</span>
+      </div>
+      <h3 class="insight-stat-big">99.94%</h3>
+      <p class="insight-desc">Confiabilidad de vectorización y cruce deduplicado</p>
+    </div>
+
+    <div style="margin-top: 16px; padding-top: 12px; border-top: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; font-size: 12px;">
+      <span>Medios monitorizados: <strong style="color: var(--primary);">48 nacionales / 120 internacionales</strong></span>
+      <a href="/calidad" style="color: var(--secondary); font-weight: 600; display: inline-flex; align-items: center; gap: 2px;">
+        Ver fuentes &rarr;
+      </a>
+    </div>
+  </div>
+</section>
+
+{% endblock %}

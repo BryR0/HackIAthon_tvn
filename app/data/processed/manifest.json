@@ -1,0 +1,723 @@
+{
+  "archivos": {
+    "eventos.geojson": "3984ec67e612dff262f1a15180895ff5dcab50ba91fa82fcb92a1acecd165c2c",
+    "excluidos.csv": "a34c6aa6518ff91a2ab501139d84fe85d02d2eb20a9f23842c186840ac5aaa7c",
+    "indicadores.csv": "da796475519f3475b58c83ff65940e2a245e49631dc79ce30a35b0f46bbf5c63",
+    "noticias.csv": "5128aee6728a78e062e9d35ce597998bfd7031ea807ce16acb80a44fa65747e5",
+    "reporte_calidad.json": "488ada9a48a09e5523725b8eec9c8c1ebcfdf8c09a9a06df81e85978ffaf5849",
+    "sbp_series.csv": "586f5f29d8cbcdb9c30e1623c079f2df759f0b7776fab7a59726bbdcab9dbb2f"
+  },
+  "consultas": [
+    {
+      "estado": 200,
+      "fuente": "tvn_rss",
+      "params": {},
+      "sha256": "c1135c384665e7af8b674c0436906e73aef58ea30b38a9ac66269f75930fd12e",
+      "url": "https://www.tvn-2.com/rss/"
+    },
+    {
+      "estado": 200,
+      "fuente": "worldbank:NY.GDP.MKTP.KD.ZG",
+      "params": {
+        "date": "2010:2024",
+        "format": "json",
+        "per_page": "1000"
+      },
+      "sha256": "c86460294554efe74cbfa8904d3cb3ea3e8ad7227f692ba8673d29a1c7802efb",
+      "url": "https://api.worldbank.org/v2/country/PAN;CRI;COL;DOM;MEX;GTM/indicator/NY.GDP.MKTP.KD.ZG"
+    },
+    {
+      "estado": 200,
+      "fuente": "worldbank:FP.CPI.TOTL.ZG",
+      "params": {
+        "date": "2010:2024",
+        "format": "json",
+        "per_page": "1000"
+      },
+      "sha256": "05c1ad3e128b655a3540eabbded275d336f4b11a4aa826dbd4f0e1a5b24e077c",
+      "url": "https://api.worldbank.org/v2/country/PAN;CRI;COL;DOM;MEX;GTM/indicator/FP.CPI.TOTL.ZG"
+    },
+    {
+      "estado": 200,
+      "fuente": "worldbank:SL.UEM.TOTL.ZS",
+      "params": {
+        "date": "2010:2024",
+        "format": "json",
+        "per_page": "1000"
+      },
+      "sha256": "1181f8e669628663be0601eef7910fcada5188aac722284c463c1a28ac2dc1fd",
+      "url": "https://api.worldbank.org/v2/country/PAN;CRI;COL;DOM;MEX;GTM/indicator/SL.UEM.TOTL.ZS"
+    },
+    {
+      "estado": 200,
+      "fuente": "worldbank:SP.POP.TOTL",
+      "params": {
+        "date": "2010:2024",
+        "format": "json",
+        "per_page": "1000"
+      },
+      "sha256": "e06e40801774c234af8de85ee9f42b0c25c547a8e2d5f454751ba60753939c0f",
+      "url": "https://api.worldbank.org/v2/country/PAN;CRI;COL;DOM;MEX;GTM/indicator/SP.POP.TOTL"
+    },
+    {
+      "estado": 200,
+      "fuente": "worldbank:IT.NET.USER.ZS",
+      "params": {
+        "date": "2010:2024",
+        "format": "json",
+        "per_page": "1000"
+      },
+      "sha256": "e0d043c22432a247b3ac3046b7de6c20310be79952ac4e2b9ae395f56943dcf6",
+      "url": "https://api.worldbank.org/v2/country/PAN;CRI;COL;DOM;MEX;GTM/indicator/IT.NET.USER.ZS"
+    },
+    {
+      "estado": 200,
+      "fuente": "worldbank:NE.EXP.GNFS.ZS",
+      "params": {
+        "date": "2010:2024",
+        "format": "json",
+        "per_page": "1000"
+      },
+      "sha256": "e76574bb0b65dbdd4ac248aaaeb968ac910878afc16f2fdf74516ff22259b428",
+      "url": "https://api.worldbank.org/v2/country/PAN;CRI;COL;DOM;MEX;GTM/indicator/NE.EXP.GNFS.ZS"
+    },
+    {
+      "estado": 200,
+      "fuente": "usgs",
+      "params": {
+        "endtime": "2024-12-31T23:59:59",
+        "format": "geojson",
+        "maxlatitude": "12",
+        "maxlongitude": "-76",
+        "minlatitude": "5",
+        "minlongitude": "-86",
+        "minmagnitude": "3",
+        "starttime": "2024-01-01"
+      },
+      "sha256": "cd04ed5749b9c61f5ea014e5b3118f8cda24f2413e43978f11a669ee73996094",
+      "url": "https://earthquake.usgs.gov/fdsnws/event/1/query"
+    },
+    {
+      "estado": 200,
+      "fuente": "gdelt:panama",
+      "params": {
+        "enddatetime": "20260723184640",
+        "format": "json",
+        "maxrecords": "250",
+        "mode": "ArtList",
+        "query": "Panama",
+        "startdatetime": "20260708184640"
+      },
+      "sha256": "87101c710bbbdfdd40244926812952dc8c5bcaddaa7475af2bcb2e77b528f582",
+      "url": "https://api.gdeltproject.org/api/v2/doc/doc"
+    },
+    {
+      "estado": 429,
+      "fuente": "gdelt:panama",
+      "params": {
+        "enddatetime": "20260807184640",
+        "format": "json",
+        "maxrecords": "250",
+        "mode": "ArtList",
+        "query": "Panama",
+        "startdatetime": "20260723184640"
+      },
+      "sha256": null,
+      "url": "https://api.gdeltproject.org/api/v2/doc/doc"
+    },
+    {
+      "estado": 429,
+      "fuente": "gdelt:panama",
+      "params": {
+        "enddatetime": "20260822184640",
+        "format": "json",
+        "maxrecords": "250",
+        "mode": "ArtList",
+        "query": "Panama",
+        "startdatetime": "20260807184640"
+      },
+      "sha256": null,
+      "url": "https://api.gdeltproject.org/api/v2/doc/doc"
+    },
+    {
+      "estado": 200,
+      "fuente": "gdelt:panama",
+      "params": {
+        "enddatetime": "20260906184640",
+        "format": "json",
+        "maxrecords": "250",
+        "mode": "ArtList",
+        "query": "Panama",
+        "startdatetime": "20260822184640"
+      },
+      "sha256": "de064c1ef0cd3db0665acab242866fda390ac8c41c4b112e456db62771e05604",
+      "url": "https://api.gdeltproject.org/api/v2/doc/doc"
+    },
+    {
+      "estado": 429,
+      "fuente": "gdelt:panama",
+      "params": {
+        "enddatetime": "20260921184640",
+        "format": "json",
+        "maxrecords": "250",
+        "mode": "ArtList",
+        "query": "Panama",
+        "startdatetime": "20260906184640"
+      },
+      "sha256": null,
+      "url": "https://api.gdeltproject.org/api/v2/doc/doc"
+    },
+    {
+      "estado": 200,
+      "fuente": "gdelt:panama",
+      "params": {
+        "enddatetime": "20261006184640",
+        "format": "json",
+        "maxrecords": "250",
+        "mode": "ArtList",
+        "query": "Panama",
+        "startdatetime": "20260921184640"
+      },
+      "sha256": "1cd1c270a979179aa56c10ae62170a3ee8758dd48d9a7eca27a57c06f79dd0a8",
+      "url": "https://api.gdeltproject.org/api/v2/doc/doc"
+    },
+    {
+      "estado": 200,
+      "fuente": "gdelt:logistica",
+      "params": {
+        "enddatetime": "20260723184640",
+        "format": "json",
+        "maxrecords": "250",
+        "mode": "ArtList",
+        "query": "(Canal OR logistica OR puerto) Panama",
+        "startdatetime": "20260708184640"
+      },
+      "sha256": "cc628d0065f5ee340f060c164f845642b8461ddde2f3ef1f084378f2765dc348",
+      "url": "https://api.gdeltproject.org/api/v2/doc/doc"
+    },
+    {
+      "estado": 200,
+      "fuente": "gdelt:logistica",
+      "params": {
+        "enddatetime": "20260807184640",
+        "format": "json",
+        "maxrecords": "250",
+        "mode": "ArtList",
+        "query": "(Canal OR logistica OR puerto) Panama",
+        "startdatetime": "20260723184640"
+      },
+      "sha256": "2b05786d50d56ef91b48583f0779fa4d59227d14f342b225aa7fe6bd318e8eef",
+      "url": "https://api.gdeltproject.org/api/v2/doc/doc"
+    },
+    {
+      "estado": 200,
+      "fuente": "gdelt:logistica",
+      "params": {
+        "enddatetime": "20260822184640",
+        "format": "json",
+        "maxrecords": "250",
+        "mode": "ArtList",
+        "query": "(Canal OR logistica OR puerto) Panama",
+        "startdatetime": "20260807184640"
+      },
+      "sha256": "2063a904c908129528bbd59901ad54aaae3da98dd725dc721888dcb643166c53",
+      "url": "https://api.gdeltproject.org/api/v2/doc/doc"
+    },
+    {
+      "estado": 200,
+      "fuente": "gdelt:logistica",
+      "params": {
+        "enddatetime": "20260906184640",
+        "format": "json",
+        "maxrecords": "250",
+        "mode": "ArtList",
+        "query": "(Canal OR logistica OR puerto) Panama",
+        "startdatetime": "20260822184640"
+      },
+      "sha256": "3030b7856ad195b7b589b1edbbe61ffb7ec6bc59b590ed07bf8a1221e0f91c13",
+      "url": "https://api.gdeltproject.org/api/v2/doc/doc"
+    },
+    {
+      "estado": 429,
+      "fuente": "gdelt:logistica",
+      "params": {
+        "enddatetime": "20260921184640",
+        "format": "json",
+        "maxrecords": "250",
+        "mode": "ArtList",
+        "query": "(Canal OR logistica OR puerto) Panama",
+        "startdatetime": "20260906184640"
+      },
+      "sha256": null,
+      "url": "https://api.gdeltproject.org/api/v2/doc/doc"
+    },
+    {
+      "estado": 200,
+      "fuente": "gdelt:logistica",
+      "params": {
+        "enddatetime": "20261006184640",
+        "format": "json",
+        "maxrecords": "250",
+        "mode": "ArtList",
+        "query": "(Canal OR logistica OR puerto) Panama",
+        "startdatetime": "20260921184640"
+      },
+      "sha256": "33b0670e50228a915347a306560a00afd6fd70a4370a6d9679c79c8027f6d798",
+      "url": "https://api.gdeltproject.org/api/v2/doc/doc"
+    },
+    {
+      "estado": 429,
+      "fuente": "gdelt:turismo",
+      "params": {
+        "enddatetime": "20260723184640",
+        "format": "json",
+        "maxrecords": "250",
+        "mode": "ArtList",
+        "query": "(turismo OR tourism) Panama",
+        "startdatetime": "20260708184640"
+      },
+      "sha256": null,
+      "url": "https://api.gdeltproject.org/api/v2/doc/doc"
+    },
+    {
+      "estado": 200,
+      "fuente": "gdelt:turismo",
+      "params": {
+        "enddatetime": "20260807184640",
+        "format": "json",
+        "maxrecords": "250",
+        "mode": "ArtList",
+        "query": "(turismo OR tourism) Panama",
+        "startdatetime": "20260723184640"
+      },
+      "sha256": "fe96fa904093e4293930c98422d00ca368c1c0701604855ea735a21ea798ba30",
+      "url": "https://api.gdeltproject.org/api/v2/doc/doc"
+    },
+    {
+      "estado": 429,
+      "fuente": "gdelt:turismo",
+      "params": {
+        "enddatetime": "20260822184640",
+        "format": "json",
+        "maxrecords": "250",
+        "mode": "ArtList",
+        "query": "(turismo OR tourism) Panama",
+        "startdatetime": "20260807184640"
+      },
+      "sha256": null,
+      "url": "https://api.gdeltproject.org/api/v2/doc/doc"
+    },
+    {
+      "estado": 200,
+      "fuente": "gdelt:turismo",
+      "params": {
+        "enddatetime": "20260906184640",
+        "format": "json",
+        "maxrecords": "250",
+        "mode": "ArtList",
+        "query": "(turismo OR tourism) Panama",
+        "startdatetime": "20260822184640"
+      },
+      "sha256": "aded138216e99ae76a1af21930a285dbdc775a5c48a868982f1c37fc761c2230",
+      "url": "https://api.gdeltproject.org/api/v2/doc/doc"
+    },
+    {
+      "estado": 200,
+      "fuente": "gdelt:turismo",
+      "params": {
+        "enddatetime": "20260921184640",
+        "format": "json",
+        "maxrecords": "250",
+        "mode": "ArtList",
+        "query": "(turismo OR tourism) Panama",
+        "startdatetime": "20260906184640"
+      },
+      "sha256": "f44185ec80f606cca5c66ec362b6eac61157a33511da721b55a076f0c939ef3c",
+      "url": "https://api.gdeltproject.org/api/v2/doc/doc"
+    },
+    {
+      "estado": 200,
+      "fuente": "gdelt:turismo",
+      "params": {
+        "enddatetime": "20261006184640",
+        "format": "json",
+        "maxrecords": "250",
+        "mode": "ArtList",
+        "query": "(turismo OR tourism) Panama",
+        "startdatetime": "20260921184640"
+      },
+      "sha256": "37de067211532e7a3babfd7a557b77934d949dd93dd30eb7d46fe1cee1ef806f",
+      "url": "https://api.gdeltproject.org/api/v2/doc/doc"
+    },
+    {
+      "estado": 200,
+      "fuente": "gdelt:economia",
+      "params": {
+        "enddatetime": "20260723184640",
+        "format": "json",
+        "maxrecords": "250",
+        "mode": "ArtList",
+        "query": "(economia OR inflacion OR empleo OR economy) Panama",
+        "startdatetime": "20260708184640"
+      },
+      "sha256": "8a63fd5f2f068c7c671f4e7a6979e646124065a8d24ea22a04afeebc641bb890",
+      "url": "https://api.gdeltproject.org/api/v2/doc/doc"
+    },
+    {
+      "estado": 200,
+      "fuente": "gdelt:economia",
+      "params": {
+        "enddatetime": "20260807184640",
+        "format": "json",
+        "maxrecords": "250",
+        "mode": "ArtList",
+        "query": "(economia OR inflacion OR empleo OR economy) Panama",
+        "startdatetime": "20260723184640"
+      },
+      "sha256": "80a748b116e87a15a58dd52953ad54a1ff4f011be500d76d6d9065d5e2625529",
+      "url": "https://api.gdeltproject.org/api/v2/doc/doc"
+    },
+    {
+      "estado": 200,
+      "fuente": "gdelt:economia",
+      "params": {
+        "enddatetime": "20260822184640",
+        "format": "json",
+        "maxrecords": "250",
+        "mode": "ArtList",
+        "query": "(economia OR inflacion OR empleo OR economy) Panama",
+        "startdatetime": "20260807184640"
+      },
+      "sha256": "eff7729a226fd218d49445142ebf2538537df91f0692bbc4bcfcadd112b9f38a",
+      "url": "https://api.gdeltproject.org/api/v2/doc/doc"
+    },
+    {
+      "estado": 200,
+      "fuente": "gdelt:economia",
+      "params": {
+        "enddatetime": "20260906184640",
+        "format": "json",
+        "maxrecords": "250",
+        "mode": "ArtList",
+        "query": "(economia OR inflacion OR empleo OR economy) Panama",
+        "startdatetime": "20260822184640"
+      },
+      "sha256": "cbe494683f88e44bfdc174bbe4751dc2c24765b827a6d10f9bff478ee2fe5744",
+      "url": "https://api.gdeltproject.org/api/v2/doc/doc"
+    },
+    {
+      "estado": 200,
+      "fuente": "gdelt:economia",
+      "params": {
+        "enddatetime": "20260921184640",
+        "format": "json",
+        "maxrecords": "250",
+        "mode": "ArtList",
+        "query": "(economia OR inflacion OR empleo OR economy) Panama",
+        "startdatetime": "20260906184640"
+      },
+      "sha256": "072567979aa317898d8bed8673b931a8c1a60020b28892d939144c5dd52bb433",
+      "url": "https://api.gdeltproject.org/api/v2/doc/doc"
+    },
+    {
+      "estado": 200,
+      "fuente": "gdelt:economia",
+      "params": {
+        "enddatetime": "20261006184640",
+        "format": "json",
+        "maxrecords": "250",
+        "mode": "ArtList",
+        "query": "(economia OR inflacion OR empleo OR economy) Panama",
+        "startdatetime": "20260921184640"
+      },
+      "sha256": "512c578c7b9042637ae3de0300c7829a99c2a883756e0cf8ac79990b1ca364f0",
+      "url": "https://api.gdeltproject.org/api/v2/doc/doc"
+    },
+    {
+      "estado": 200,
+      "fuente": "gdelt:eventos_naturales",
+      "params": {
+        "enddatetime": "20260723184640",
+        "format": "json",
+        "maxrecords": "250",
+        "mode": "ArtList",
+        "query": "(inundacion OR sismo OR lluvias OR sequia OR flood) Panama",
+        "startdatetime": "20260708184640"
+      },
+      "sha256": "839c59a16f3736c21653e9ddc50578087909cc5b18d0045bb73eec1becfbcdb0",
+      "url": "https://api.gdeltproject.org/api/v2/doc/doc"
+    },
+    {
+      "estado": 200,
+      "fuente": "gdelt:eventos_naturales",
+      "params": {
+        "enddatetime": "20260807184640",
+        "format": "json",
+        "maxrecords": "250",
+        "mode": "ArtList",
+        "query": "(inundacion OR sismo OR lluvias OR sequia OR flood) Panama",
+        "startdatetime": "20260723184640"
+      },
+      "sha256": "9e5513d1eda774a62e81e20d244f190889b96ad6d75a7f07d6b06b1144224faa",
+      "url": "https://api.gdeltproject.org/api/v2/doc/doc"
+    },
+    {
+      "estado": 200,
+      "fuente": "gdelt:eventos_naturales",
+      "params": {
+        "enddatetime": "20260822184640",
+        "format": "json",
+        "maxrecords": "250",
+        "mode": "ArtList",
+        "query": "(inundacion OR sismo OR lluvias OR sequia OR flood) Panama",
+        "startdatetime": "20260807184640"
+      },
+      "sha256": "35d79419a31b9d0fd6eeef9cc07f3c71a053b3ea45528d6724b097df7a39a321",
+      "url": "https://api.gdeltproject.org/api/v2/doc/doc"
+    },
+    {
+      "estado": 429,
+      "fuente": "gdelt:eventos_naturales",
+      "params": {
+        "enddatetime": "20260906184640",
+        "format": "json",
+        "maxrecords": "250",
+        "mode": "ArtList",
+        "query": "(inundacion OR sismo OR lluvias OR sequia OR flood) Panama",
+        "startdatetime": "20260822184640"
+      },
+      "sha256": null,
+      "url": "https://api.gdeltproject.org/api/v2/doc/doc"
+    },
+    {
+      "estado": 200,
+      "fuente": "gdelt:eventos_naturales",
+      "params": {
+        "enddatetime": "20260921184640",
+        "format": "json",
+        "maxrecords": "250",
+        "mode": "ArtList",
+        "query": "(inundacion OR sismo OR lluvias OR sequia OR flood) Panama",
+        "startdatetime": "20260906184640"
+      },
+      "sha256": "557dc403958575351a1840b6bcc29c6b5691a4cef966af949fab2cff5b710da3",
+      "url": "https://api.gdeltproject.org/api/v2/doc/doc"
+    },
+    {
+      "estado": 429,
+      "fuente": "gdelt:eventos_naturales",
+      "params": {
+        "enddatetime": "20261006184640",
+        "format": "json",
+        "maxrecords": "250",
+        "mode": "ArtList",
+        "query": "(inundacion OR sismo OR lluvias OR sequia OR flood) Panama",
+        "startdatetime": "20260921184640"
+      },
+      "sha256": null,
+      "url": "https://api.gdeltproject.org/api/v2/doc/doc"
+    },
+    {
+      "estado": 200,
+      "fuente": "sbp:2024-01",
+      "params": {},
+      "sha256": "3e3e166baf20d4a497e0f9d775f24338c575715a91281bf52b826a5ff24c17ca",
+      "url": "https://www.superbancos.gob.pa/documentos/financiera_y_estadistica/estudios/IAB/IAB-0124.pdf"
+    },
+    {
+      "estado": 200,
+      "fuente": "sbp:2024-02",
+      "params": {},
+      "sha256": "47f272772c012da5c791be9613a6197f10f30806673ca3ca18576d43e205c559",
+      "url": "https://www.superbancos.gob.pa/documentos/financiera_y_estadistica/estudios/IAB/IAB-0224.pdf"
+    },
+    {
+      "estado": 200,
+      "fuente": "sbp:2024-03",
+      "params": {},
+      "sha256": "0c9b93fcdd83d76fcffcab4b719a0530805a7224fcad087ef53cc5f536a2a403",
+      "url": "https://www.superbancos.gob.pa/documentos/financiera_y_estadistica/estudios/IAB/IAB-0324.pdf"
+    },
+    {
+      "estado": 200,
+      "fuente": "sbp:2024-04",
+      "params": {},
+      "sha256": "d3436a4df9e525ef9fdde407bdb9cf2ba7739d9ddd9442f2051708e8aead3ee3",
+      "url": "https://www.superbancos.gob.pa/documentos/financiera_y_estadistica/estudios/IAB/IAB-0424.pdf"
+    },
+    {
+      "estado": 200,
+      "fuente": "sbp:2024-05",
+      "params": {},
+      "sha256": "b8d48dcad8642d64b32bd45b8dae10b103a8b1fcbc487f5ce82870b9d7091ca7",
+      "url": "https://www.superbancos.gob.pa/documentos/financiera_y_estadistica/estudios/IAB/IAB-0524.pdf"
+    },
+    {
+      "estado": 200,
+      "fuente": "sbp:2024-06",
+      "params": {},
+      "sha256": "9e3fa6ef64e6b5858b4692f3db3ce8f5bcdae433e4e3e9bf0574e3dfff105ce5",
+      "url": "https://www.superbancos.gob.pa/documentos/financiera_y_estadistica/estudios/IAB/IAB-0624.pdf"
+    },
+    {
+      "estado": 200,
+      "fuente": "sbp:2024-07",
+      "params": {},
+      "sha256": "6ddb6d1f7c40c4fbeff18517b727e7bfb093d2ef10a8bc2d1a15559c55a95a47",
+      "url": "https://www.superbancos.gob.pa/documentos/financiera_y_estadistica/estudios/IAB/IAB-0724.pdf"
+    },
+    {
+      "estado": 200,
+      "fuente": "sbp:2024-08",
+      "params": {},
+      "sha256": "5f97e299513066dd8ddd5084c4bd048f21c6b0d406461d07af13f1bc2350748a",
+      "url": "https://www.superbancos.gob.pa/documentos/financiera_y_estadistica/estudios/IAB/IAB-0824.pdf"
+    },
+    {
+      "estado": 200,
+      "fuente": "sbp:2024-09",
+      "params": {},
+      "sha256": "517b57bd3d146c6dc1097329d1e73d7010a45a754d7aef3d7e8ea7dc583adb8f",
+      "url": "https://www.superbancos.gob.pa/documentos/financiera_y_estadistica/estudios/IAB/IAB-0924.pdf"
+    },
+    {
+      "estado": 200,
+      "fuente": "sbp:2024-10",
+      "params": {},
+      "sha256": "e434924a04bd340082cd0221befffb7d7df752489b9a2161dbdf4af9eb8d658c",
+      "url": "https://www.superbancos.gob.pa/documentos/financiera_y_estadistica/estudios/IAB/IAB-1024.pdf"
+    },
+    {
+      "estado": 200,
+      "fuente": "sbp:2024-11",
+      "params": {},
+      "sha256": "48d712a7cdbeee0aa50638b47744f75d94475e69b68e96fc067256929c31d66d",
+      "url": "https://www.superbancos.gob.pa/documentos/financiera_y_estadistica/estudios/IAB/IAB-1124.pdf"
+    },
+    {
+      "estado": 200,
+      "fuente": "sbp:2024-12",
+      "params": {},
+      "sha256": "fee5fea482dba1ea18f8e74a566460a8b6c2bd242baf645887119745a62f0014",
+      "url": "https://www.superbancos.gob.pa/documentos/financiera_y_estadistica/estudios/IAB/IAB-1224.pdf"
+    }
+  ],
+  "conteos": {
+    "eventos.geojson": 82,
+    "excluidos.csv": 1531,
+    "indicadores.csv": 540,
+    "noticias.csv": 3049,
+    "sbp_series.csv": 156
+  },
+  "desviaciones": [
+    "D6 (ADR 0002): noticias de los últimos 90 días antes del corte, no [2024-01-01, 2025-10-01); ninguna fuente pública de noticias alcanza 2024 desde 2026-10."
+  ],
+  "fecha_corte_utc": "2026-10-06T18:46:40+00:00",
+  "licencias": [
+    {
+      "condiciones": "Medio del patrocinador",
+      "fuente": "TVN Panamá · sitio oficial",
+      "ref": "1",
+      "url": "https://www.tvn-2.com/"
+    },
+    {
+      "condiciones": "Titulares, fechas y descripciones; no implica licencia sobre artículos, videos o imágenes",
+      "fuente": "TVN · feed RSS público",
+      "ref": "2",
+      "url": "https://www.tvn-2.com/rss/"
+    },
+    {
+      "condiciones": "Metadatos; no transfiere derechos de los medios enlazados",
+      "fuente": "GDELT · DOC 2.0 API",
+      "ref": "3",
+      "url": "https://blog.gdeltproject.org/gdelt-doc-2-0-api-debuts"
+    },
+    {
+      "condiciones": "CC BY 4.0 salvo excepciones por indicador",
+      "fuente": "Banco Mundial · Indicators API v2",
+      "ref": "4",
+      "url": "https://datahelpdesk.worldbank.org/knowledgebase/articles/889392-about-the-indicators-api-documentation"
+    },
+    {
+      "condiciones": "CC BY 4.0",
+      "fuente": "Banco Mundial · Panamá",
+      "ref": "5",
+      "url": "https://data.worldbank.org/country/panama"
+    },
+    {
+      "condiciones": "Atribución obligatoria; período de referencia ≠ año de extracción",
+      "fuente": "Banco Mundial · términos para datasets",
+      "ref": "6",
+      "url": "https://www.worldbank.org/en/about/legal/terms-of-use-for-datasets"
+    },
+    {
+      "condiciones": "Usar ID y URL del evento; solo hechos sísmicos",
+      "fuente": "USGS · servicio FDSN de eventos",
+      "ref": "7",
+      "url": "https://earthquake.usgs.gov/fdsnws/event/1"
+    },
+    {
+      "condiciones": "Uso informativo; libre acceso; citar a la SBP como fuente y ser fiel a su contenido y contexto. Solo agregados del sistema, sin datos de clientes ni por banco",
+      "fuente": "SBP · estadísticas financieras",
+      "ref": "8",
+      "url": "https://www.superbancos.gob.pa/estadisticas-financieras"
+    },
+    {
+      "condiciones": "Uso informativo; citar a la SBP; el análisis del equipo no es opinión oficial de la SBP",
+      "fuente": "SBP · estudios e informes (Informe de Actividad Bancaria)",
+      "ref": "9",
+      "url": "https://www.superbancos.gob.pa/estadisticas-financieras/estudios"
+    }
+  ],
+  "solicitudes_fallidas": [
+    {
+      "estado": 429,
+      "fuente": "gdelt:panama"
+    },
+    {
+      "estado": 429,
+      "fuente": "gdelt:panama"
+    },
+    {
+      "estado": 429,
+      "fuente": "gdelt:panama"
+    },
+    {
+      "estado": 429,
+      "fuente": "gdelt:logistica"
+    },
+    {
+      "estado": 429,
+      "fuente": "gdelt:turismo"
+    },
+    {
+      "estado": 429,
+      "fuente": "gdelt:turismo"
+    },
+    {
+      "estado": 429,
+      "fuente": "gdelt:eventos_naturales"
+    },
+    {
+      "estado": 429,
+      "fuente": "gdelt:eventos_naturales"
+    }
+  ],
+  "transformaciones": [
+    "Fechas a UTC ISO 8601; seendate de GDELT solo como fecha_deteccion",
+    "URL normalizada (host en minúsculas, sin parámetros utm/fbclid, sin barra final)",
+    "Deduplicación por URL normalizada; prioridad TVN RSS sobre GDELT",
+    "Exclusión de noticias fuera de la ventana de extracción",
+    "Exclusión de noticias en idiomas distintos de español e inglés",
+    "Descripción del RSS de TVN omitida hasta autorización del patrocinador (solo metadatos)",
+    "Cuadrícula país × indicador × año completada con valor nulo",
+    "Unidad del Banco Mundial derivada del nombre del indicador cuando 'unit' viene vacío",
+    "SBP: tabla de crédito local por sector extraída con pypdf (sbp-credito-local-1.0.0); anclada por encabezado del mes, valores sin separador de miles, página 1-based del PDF",
+    "SBP: sumas de sectores validadas con tolerancia de redondeo ±0,5 por sumando"
+  ],
+  "ventana_noticias": [
+    "2026-07-08T18:46:40+00:00",
+    "2026-10-06T18:46:40+00:00"
+  ],
+  "version": "panama-senales-evidencias-v1"
+}

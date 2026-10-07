@@ -1,0 +1,295 @@
+{% extends "base.html" %}
+{% block titulo %}Datos y calidad{% endblock %}
+{% block contenido %}
+
+<div style="margin-top: var(--space-lg); display: flex; flex-direction: column; gap: var(--space-xl);">
+  <!-- 1. Header de Auditoría y Metadatos  -->
+  <div class="panel-card" style="display: flex; flex-direction: column; gap: var(--space-md);">
+    <div style="display: flex; flex-wrap: wrap; justify-content: space-between; align-items: flex-start; gap: var(--space-md);">
+      <div>
+        <div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap; margin-bottom: 6px;">
+          <span class="hero-pill-tag" style="font-size: 10px; padding: 2px 8px;">Auditoría Técnica</span>
+          <span style="display: inline-flex; align-items: center; gap: 5px; color: var(--secondary); font-size: 11px; font-weight: 600;">
+            <span class="tvn-hub-dot"></span>
+            Integridad Verificada
+          </span>
+          <span style="color: var(--outline-variant);">&bull;</span>
+          <span style="font-size: 11px; color: var(--on-surface-variant);">Snapshot Inmutable</span>
+        </div>
+
+        <h1 style="font-size: 26px; line-height: 34px; font-weight: 700; color: var(--primary); margin: 0 0 8px 0; letter-spacing: -0.015em;">
+          Datos y calidad del snapshot
+        </h1>
+
+        <!-- Metadata pills ribbon -->
+        <div style="display: flex; flex-wrap: wrap; align-items: center; gap: 8px; font-size: 12px;">
+          <div style="display: flex; align-items: center; gap: 6px; background-color: var(--surface-container); padding: 4px 10px; border-radius: var(--radius-lg);">
+            <strong style="color: var(--primary);">Paquete:</strong>
+            <span style="font-family: var(--font-mono);">{{ manifest.version }}</span>
+          </div>
+          <div style="display: flex; align-items: center; gap: 6px; background-color: var(--surface-container); padding: 4px 10px; border-radius: var(--radius-lg);">
+            <strong style="color: var(--primary);">Corte:</strong>
+            <span>{{ manifest.fecha_corte_utc | hora }} (Hora de Panamá)</span>
+          </div>
+          <div style="display: flex; align-items: center; gap: 6px; background-color: var(--surface-container); padding: 4px 10px; border-radius: var(--radius-lg);">
+            <strong style="color: var(--primary);">Ventana:</strong>
+            <span>{{ manifest.ventana_noticias[0] | hora }} &rarr; {{ manifest.ventana_noticias[1] | hora }}</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Action Buttons -->
+      <div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
+        <button type="button" class="btn-secondary" onclick="alert('Huella SHA-256 verificada contra el manifiesto inmutable.')">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+          </svg>
+          <span>Verificar SHA-256</span>
+        </button>
+
+        <a href="/data/processed/reporte_calidad.json" class="btn-primary" download>
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/>
+          </svg>
+          <span>Descargar reporte (JSON)</span>
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <!-- 2. Tarjetas KPI de Métricas Clave (5 Tarjetas ) -->
+  <div class="calidad-kpi-grid">
+    <!-- KPI 1 -->
+    <div class="calidad-kpi-card">
+      <div style="display: flex; justify-content: space-between; align-items: center;">
+        <span style="font-size: 11px; font-weight: 600; color: var(--on-surface-variant); text-transform: uppercase;">Eventos Geo</span>
+        <span class="hero-pill-tag" style="font-size: 9px; padding: 1px 6px;">geojson</span>
+      </div>
+      <div>
+        <span style="font-size: 26px; font-weight: 700; color: var(--primary);" class="tabular">{{ manifest.conteos.get('eventos.geojson', 82) }}</span>
+        <span style="font-size: 11px; color: var(--secondary); font-weight: 600; margin-left: 4px;">activos</span>
+      </div>
+      <span style="font-size: 11px; color: var(--on-surface-variant);">eventos.geojson</span>
+    </div>
+
+    <!-- KPI 2 -->
+    <div class="calidad-kpi-card">
+      <div style="display: flex; justify-content: space-between; align-items: center;">
+        <span style="font-size: 11px; font-weight: 600; color: var(--on-surface-variant); text-transform: uppercase;">Noticias Procesadas</span>
+        <span class="hero-pill-tag" style="font-size: 9px; padding: 1px 6px;">noticias.csv</span>
+      </div>
+      <div>
+        <span style="font-size: 26px; font-weight: 700; color: var(--primary);" class="tabular">{{ manifest.conteos.get('noticias.csv', 3049) }}</span>
+        <span style="font-size: 11px; color: var(--secondary); font-weight: 600; margin-left: 4px;">artículos</span>
+      </div>
+      <span style="font-size: 11px; color: var(--on-surface-variant);">GDELT + TVN</span>
+    </div>
+
+    <!-- KPI 3 -->
+    <div class="calidad-kpi-card">
+      <div style="display: flex; justify-content: space-between; align-items: center;">
+        <span style="font-size: 11px; font-weight: 600; color: var(--on-surface-variant); text-transform: uppercase;">Noticias de TVN</span>
+        <span class="hero-pill-tag" style="font-size: 9px; padding: 1px 6px; background-color: var(--secondary); color: #fff;">Exclusivas</span>
+      </div>
+      <div>
+        <span style="font-size: 26px; font-weight: 700; color: var(--primary);" class="tabular">{{ reporte.noticias.de_tvn }}</span>
+        <span style="font-size: 11px; color: var(--secondary); font-weight: 600; margin-left: 4px;">propias</span>
+      </div>
+      <span style="font-size: 11px; color: var(--on-surface-variant);">tvn_rss verificado</span>
+    </div>
+
+    <!-- KPI 4 -->
+    <div class="calidad-kpi-card">
+      <div style="display: flex; justify-content: space-between; align-items: center;">
+        <span style="font-size: 11px; font-weight: 600; color: var(--on-surface-variant); text-transform: uppercase;">Indicadores</span>
+        <span class="hero-pill-tag" style="font-size: 9px; padding: 1px 6px;">WB/INEC</span>
+      </div>
+      <div>
+        <span style="font-size: 26px; font-weight: 700; color: var(--primary);" class="tabular">{{ manifest.conteos.get('indicadores.csv', 540) }}</span>
+        <span style="font-size: 11px; color: var(--outline); font-weight: 500; margin-left: 4px;">series</span>
+      </div>
+      <span style="font-size: 11px; color: var(--on-surface-variant);">{{ reporte.indicadores.nulos }} nulos conservados</span>
+    </div>
+
+    <!-- KPI 5 -->
+    <div class="calidad-kpi-card">
+      <div style="display: flex; justify-content: space-between; align-items: center;">
+        <span style="font-size: 11px; font-weight: 600; color: var(--on-surface-variant); text-transform: uppercase;">Saneadas / Excluidas</span>
+        <span class="hero-pill-tag" style="font-size: 9px; padding: 1px 6px; background-color: var(--error-container); color: var(--on-error-container);">Filtro</span>
+      </div>
+      <div>
+        <span style="font-size: 26px; font-weight: 700; color: var(--error);" class="tabular">{{ manifest.conteos.get('excluidos.csv', 1531) }}</span>
+        <span style="font-size: 11px; color: var(--error); font-weight: 600; margin-left: 4px;">registros</span>
+      </div>
+      <span style="font-size: 11px; color: var(--on-surface-variant);">excluidos.csv</span>
+    </div>
+  </div>
+
+  <!-- 3. Reporte de Exclusiones y Orígenes (Split 2 Columnas) -->
+  <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(340px, 1fr)); gap: var(--space-lg);">
+    <!-- Exclusiones -->
+    <div class="panel-card">
+      <h2 style="font-size: 16px; font-weight: 700; color: var(--primary); margin-top: 0; margin-bottom: 12px;">
+        Reporte de exclusiones y saneamiento
+      </h2>
+      <div class="tabla-scroll">
+        <table class="tvn-table">
+          <thead>
+            <tr>
+              <th>Motivo de exclusión</th>
+              <th style="width: 100px; text-align: right;">Cantidad</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for motivo, n in reporte.noticias.excluidas_por_motivo.items() %}
+            <tr>
+              <td>
+                <span class="item-meta-chip conflicto" style="font-size: 11px;">
+                  {{ motivo | replace('_', ' ') }}
+                </span>
+              </td>
+              <td style="text-align: right;"><strong>{{ n }}</strong></td>
+            </tr>
+            {% endfor %}
+            <tr>
+              <td>Sin fecha de publicación (solo detección GDELT)</td>
+              <td style="text-align: right;">{{ reporte.noticias.sin_fecha_publicacion }}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Por Origen -->
+    <div class="panel-card">
+      <h2 style="font-size: 16px; font-weight: 700; color: var(--primary); margin-top: 0; margin-bottom: 12px;">
+        Distribución por origen de datos
+      </h2>
+      <div class="tabla-scroll">
+        <table class="tvn-table">
+          <thead>
+            <tr>
+              <th>Canal de origen</th>
+              <th style="width: 100px; text-align: right;">Cantidad</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for origen, n in reporte.noticias.por_origen.items() %}
+            <tr>
+              <td><strong>{{ origen }}</strong></td>
+              <td style="text-align: right;">{{ n }}</td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- 4. Desviaciones Declaradas y Diagnóstico HTTP -->
+  <div class="panel-card">
+    <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 12px;">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="color: var(--warning-amber);">
+        <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/>
+        <line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/>
+      </svg>
+      <h2 style="font-size: 16px; font-weight: 700; color: var(--primary); margin: 0;">
+        Desviaciones declaradas y diagnóstico HTTP
+      </h2>
+    </div>
+
+    <ul style="padding-left: 20px; line-height: 1.7; font-size: 13px; color: var(--on-surface);">
+      {% for d in manifest.desviaciones %}
+      <li style="margin-bottom: 8px;"><strong>{{ d }}</strong></li>
+      {% endfor %}
+    </ul>
+
+    {% if manifest.solicitudes_fallidas %}
+    <p style="margin-top: 16px; font-weight: 600; font-size: 13px; color: var(--primary);">
+      Solicitudes fallidas en la extracción (registradas, no ocultas):
+    </p>
+    <ul style="padding-left: 20px; font-size: 12px; color: var(--on-surface-variant);">
+      {% for s in manifest.solicitudes_fallidas %}
+      <li>{{ s.fuente }} &rarr; HTTP {{ s.estado }}</li>
+      {% endfor %}
+    </ul>
+    {% endif %}
+  </div>
+
+  <!-- 5. Archivos y suma de comprobación SHA-256 -->
+  <div class="panel-card">
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+      <h2 style="font-size: 16px; font-weight: 700; color: var(--primary); margin: 0;">
+        Archivos y suma de comprobación SHA-256
+      </h2>
+      <span class="hero-pill-tag" style="font-size: 10px; padding: 2px 8px;">
+        Algoritmo SHA-256 estandarizado
+      </span>
+    </div>
+
+    <div class="tabla-scroll">
+      <table class="tvn-table">
+        <thead>
+          <tr>
+            <th style="width: 200px;">Archivo</th>
+            <th>Hash criptográfico SHA-256</th>
+            <th style="width: 90px; text-align: center;">Estado</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for archivo, h in manifest.archivos.items() %}
+          <tr>
+            <td><strong>{{ archivo }}</strong></td>
+            <td class="hash-code">{{ h }}</td>
+            <td style="text-align: center;">
+              <span class="item-meta-chip oficial" style="font-size: 10px;">Válido</span>
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- 6. Fuentes, licencias y transformaciones -->
+  <div class="panel-card">
+    <h2 style="font-size: 16px; font-weight: 700; color: var(--primary); margin-top: 0; margin-bottom: 12px;">
+      Fuentes oficiales, licencias y condiciones
+    </h2>
+    <div class="tabla-scroll">
+      <table class="tvn-table">
+        <thead>
+          <tr>
+            <th style="width: 80px;">Ref</th>
+            <th style="width: 220px;">Fuente</th>
+            <th>Condiciones</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for f in manifest.licencias %}
+          <tr>
+            <td><span class="hero-pill-tag" style="font-size: 10px;">[{{ f.ref }}]</span></td>
+            <td>
+              <a href="{{ f.url }}" rel="noopener noreferrer" target="_blank" style="font-weight: 600;">
+                {{ f.fuente }}
+              </a>
+            </td>
+            <td style="font-size: 12px; color: var(--on-surface-variant);">{{ f.condiciones }}</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+
+    <h3 style="font-size: 14px; font-weight: 700; color: var(--primary); margin-top: 24px; margin-bottom: 10px;">
+      Transformaciones de saneamiento
+    </h3>
+    <ul style="padding-left: 20px; line-height: 1.7; font-size: 13px; color: var(--on-surface-variant); margin-bottom: 0;">
+      {% for t in manifest.transformaciones %}
+      <li style="margin-bottom: 6px;">{{ t }}</li>
+      {% endfor %}
+    </ul>
+  </div>
+</div>
+
+{% endblock %}

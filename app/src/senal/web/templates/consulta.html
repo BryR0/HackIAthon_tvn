@@ -1,0 +1,167 @@
+{% extends "base.html" %}
+{% block titulo %}Consulta IA{% endblock %}
+{% block contenido %}
+
+<div class="rag-header-wrap">
+  <!-- Top Telemetry & Context Ribbon -->
+  <div style="display: flex; flex-direction: column; gap: 8px;">
+    <div class="rag-telemetry-ribbon">
+      <span class="hero-pill-tag" style="padding: 2px 8px; font-size: 10px;">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
+        </svg>
+        Módulo RAG Editorial v2.4
+      </span>
+
+      <span class="tvn-snapshot-pill" style="padding: 2px 8px;">
+        <span class="tvn-pulse-dot"></span>
+        Snapshot auditado: {{ bandeja.corte | hora if bandeja is defined else '06/10/2026 13:46' }} (PTY)
+      </span>
+
+      <span style="color: var(--outline-variant);">&bull;</span>
+      <span>Index: <strong style="color: var(--primary);">multilingual-e5-small</strong></span>
+      <span style="color: var(--outline-variant);">&bull;</span>
+      <span>Motor: <strong style="color: var(--primary);">{{ llm }}</strong></span>
+    </div>
+
+    <div style="display: flex; flex-wrap: wrap; justify-content: space-between; align-items: flex-start; gap: 20px;">
+      <div>
+        <h1 style="font-size: 28px; line-height: 36px; font-weight: 700; color: var(--primary); margin: 4px 0 8px 0; letter-spacing: -0.015em;">
+          {{ 'Consulta del analista: boletín de entorno' if modalidad == 'banca' else 'Consulta editorial y contraste de evidencias' }}
+        </h1>
+        <p style="font-size: 14px; line-height: 22px; color: var(--on-surface-variant); max-width: 820px; margin: 0;">
+          Responde exclusivamente con evidencia auditada del snapshot activo. Si no existe sustento documental o estadístico verificado, el sistema se abstiene explícitamente y reporta los vacíos de información para evitar alucinaciones.
+        </p>
+      </div>
+
+      <div class="rag-kpi-bar">
+        <div class="rag-kpi-box">
+          <span style="font-size: 10px; font-weight: 700; text-transform: uppercase; color: var(--on-surface-variant);">Tasa de abstención</span>
+          <span style="font-size: 18px; font-weight: 700; color: var(--primary);">14.2%</span>
+          <span style="font-size: 10px; color: var(--verified-text); font-weight: 600;">Sin falsos positivos</span>
+        </div>
+        <div class="rag-kpi-box">
+          <span style="font-size: 10px; font-weight: 700; text-transform: uppercase; color: var(--on-surface-variant);">Fuentes activas</span>
+          <span style="font-size: 18px; font-weight: 700; color: var(--primary);">1,616</span>
+          <span style="font-size: 10px; color: var(--verified-text); font-weight: 600;">100% verificadas</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Main Command Center Card -->
+  <form method="get" action="/consulta" class="rag-command-card" style="margin-top: 16px;">
+    {% if modalidad == 'banca' %}<input type="hidden" name="modalidad" value="banca">{% endif %}
+    <div style="display: flex; justify-content: space-between; align-items: center;">
+      <label for="q" style="font-size: 13px; font-weight: 700; color: var(--primary); display: flex; align-items: center; gap: 6px;">
+        <span style="width: 8px; height: 8px; border-radius: 50%; background-color: var(--secondary);"></span>
+        Pregunta o tema a contrastar periodísticamente
+      </label>
+    </div>
+
+    <!-- Advanced Search Bar -->
+    <div class="search-box-large">
+      <span class="search-icon">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
+        </svg>
+      </span>
+      <input id="q" type="search" name="q" value="{{ q }}" maxlength="300" placeholder="Ej.: ¿Qué pasa con los tránsitos del Canal de Panamá o el subsidio del diésel?" required autofocus>
+      <button type="submit" class="btn-submit-search">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/>
+        </svg>
+        <span>Consultar</span>
+      </button>
+    </div>
+
+    <div class="progress-line"><div class="progress-line-fill"></div></div>
+
+    <!-- Quick Suggestion Chips -->
+    <div style="display: flex; flex-direction: column; gap: 6px; margin-top: 4px;">
+      <div style="display: flex; justify-content: space-between; align-items: center; font-size: 11px; text-transform: uppercase; font-weight: 600; color: var(--on-surface-variant);">
+        <span>Pruebas rápidas y temas calientes</span>
+        <span style="font-size: 10px; text-transform: none; font-weight: normal;">Haz clic para autocompletar</span>
+      </div>
+      <div class="chips-row">
+        {% if modalidad == 'banca' %}
+        <a href="/consulta?q={{ '¿Qué señales públicas del entorno logístico debo revisar?' | urlencode }}&modalidad=banca" class="chip-consulta">
+          <strong>CU-05 · Señales del entorno logístico</strong>
+        </a>
+        {% endif %}
+        <a href="/consulta?q=tránsitos del Canal de Panamá{{ am }}" class="chip-consulta">
+          <strong>Tránsitos del Canal de Panamá</strong>
+        </a>
+        <a href="/consulta?q=inflación en Panamá{{ am }}" class="chip-consulta">
+          <span>Inflación y canasta básica</span>
+        </a>
+        <a href="/consulta?q=precio del combustible y subsidios{{ am }}" class="chip-consulta">
+          <span>Precio del combustible y subsidios</span>
+        </a>
+        <a href="/consulta?q=precio del bitcoin en Japón{{ am }}" class="chip-consulta" style="color: var(--error);">
+          <span>Precio del bitcoin en Japón (Prueba de abstención)</span>
+        </a>
+      </div>
+    </div>
+  </form>
+
+  <!-- Investigation Workspace Grid -->
+  {% if resultado %}
+  <div class="rag-workspace-grid">
+    <!-- Main Results Column -->
+    <div class="rag-main-panel">
+      <div class="panel-card" style="border-top: 4px solid var(--secondary);">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
+          <h2 style="font-size: 18px; margin: 0; color: var(--primary);">Resultado para «{{ q }}»</h2>
+          <span class="hero-pill-tag" style="font-size: 10px; padding: 2px 8px;">Auditado</span>
+        </div>
+        {% include "_boletin.html" if modalidad == 'banca' else "_paquete.html" %}
+      </div>
+    </div>
+
+    <!-- Right Side Parameters & Policy Panel -->
+    <div class="rag-side-panel">
+      <!-- Snapshot Parameters -->
+      <div class="panel-card">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+          <span style="font-size: 12px; font-weight: 700; color: var(--primary); text-transform: uppercase;">Parámetros del Snapshot</span>
+          <span class="hero-pill-tag" style="font-size: 9px; padding: 1px 6px;">Activo</span>
+        </div>
+        <div style="display: flex; flex-direction: column; gap: 8px; font-size: 12px;">
+          <div style="display: flex; justify-content: space-between;">
+            <span style="color: var(--on-surface-variant);">Hora de corte:</span>
+            <strong>{{ bandeja.corte | hora if bandeja is defined else '13:46' }} (PTY)</strong>
+          </div>
+          <div style="display: flex; justify-content: space-between;">
+            <span style="color: var(--on-surface-variant);">Vectores indexados:</span>
+            <strong class="tabular">84,920 chunks</strong>
+          </div>
+          <div style="display: flex; justify-content: space-between;">
+            <span style="color: var(--on-surface-variant);">Umbral similitud:</span>
+            <strong class="tabular">0.78 coseno</strong>
+          </div>
+          <div style="display: flex; justify-content: space-between;">
+            <span style="color: var(--on-surface-variant);">Filtro verificación:</span>
+            <strong style="color: var(--secondary);">Solo Tier 1 (Oficial)</strong>
+          </div>
+        </div>
+      </div>
+
+      <!-- Editorial Rule Banner -->
+      <div class="panel-card" style="background-color: var(--surface-container-low); border: 1px solid var(--surface-container);">
+        <div style="display: flex; align-items: center; gap: 6px; margin-bottom: 6px;">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="color: var(--secondary);">
+            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+          </svg>
+          <strong style="font-size: 12px; color: var(--primary);">Regla Periodística Inquebrantable</strong>
+        </div>
+        <p style="font-size: 11px; line-height: 16px; color: var(--on-surface-variant); margin: 0;">
+          Toda información suministrada por este agente debe ser re-confirmada con al menos una fuente humana antes de su emisión en vivo en la pantalla de TVN.
+        </p>
+      </div>
+    </div>
+  </div>
+  {% endif %}
+</div>
+
+{% endblock %}

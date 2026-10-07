@@ -1,0 +1,100 @@
+{# Boletín de entorno (modalidad banca, reto §3). Variables: resultado, observaciones, hipotesis. #}
+{% include "_resultado_alertas.html" %}
+{% if resultado.abstencion %}
+<div class="panel-card" style="background-color: var(--error-container); border-color: rgba(186, 26, 26, 0.2); margin-bottom: 16px;" role="status">
+  <strong style="color: var(--on-error-container); font-size: 15px;">Abstención.</strong>
+  <p style="color: var(--on-error-container); font-size: 13px; line-height: 20px; margin: 6px 0 0 0;">{{ resultado.motivo }}</p>
+  {% for d in resultado.descartadas %}
+    <div style="font-size: 12px; color: var(--on-error-container); margin-top: 4px;">
+      &bull; <span class="hash-code">Descartada ({{ d.motivo }}):</span> {{ d.afirmacion.texto }}
+    </div>
+  {% endfor %}
+</div>
+{% else %}
+{% set b = resultado.paquete %}
+<article aria-labelledby="boletin-titulo">
+  <span class="hero-pill-tag" style="font-size: 10px; padding: 2px 8px;">Boletín de entorno &middot; borrador para analista</span>
+  <h3 id="boletin-titulo" style="font-size: 17px; margin: 8px 0 6px 0; color: var(--primary);">{{ b.titulo }}</h3>
+  <p style="font-size: 12px; color: var(--outline); margin: 0 0 12px 0;">
+    El resumen se verificó contra la evidencia: frases con cifras sin respaldo o con lenguaje no permitido en banca se eliminaron. La redacción requiere revisión humana.
+  </p>
+
+  <div class="panel-card" style="box-shadow: none;">
+    <h3 style="font-size: 14px; font-weight: 700; color: var(--primary); margin-top: 0;">
+      Resumen <span style="font-size: 11px; font-weight: normal; color: var(--outline);">({{ b.resumen.split() | length }} / 250 palabras)</span>
+    </h3>
+    <p style="font-size: 13px; line-height: 22px; color: var(--on-surface); margin: 0;">{{ b.resumen }}</p>
+  </div>
+
+  <div class="boletin-meta">
+    <div><span>Alcance</span>{{ b.alcance }}</div>
+    <div><span>Período de la evidencia</span>{{ b.horizonte_evidencia }}</div>
+    <div><span>Horizonte de seguimiento</span>{{ b.horizonte_seguimiento }}</div>
+  </div>
+
+  <section class="boletin-bloque" aria-label="Sectores potencialmente relacionados">
+    <h3>Sectores potencialmente relacionados</h3>
+    {% if b.sectores %}
+      {% for s in b.sectores %}<span class="sector-chip" title="{{ s.razon }}">{{ s.sector }}</span> {% endfor %}
+      <p style="font-size: 12px; color: var(--outline); margin: 8px 0 0 0;">{{ b.sectores[0].razon }}</p>
+    {% else %}
+      <p style="font-size: 12px; color: var(--outline); margin: 0;">El tema no tiene sectores mapeados; no se fuerza una relación.</p>
+    {% endif %}
+  </section>
+
+  <section class="boletin-bloque" aria-label="Observaciones">
+    <h3>Observaciones ({{ observaciones | length }}) <span style="font-size: 11px; font-weight: normal; color: var(--outline);">· lo que dicen las fuentes</span></h3>
+    <ul class="boletin-lista">
+      {% for a in observaciones %}
+      <li>
+        <span class="category-chip" style="font-size: 10px; padding: 1px 6px;">{{ a.tipo }}</span> {{ a.texto }}<br>
+        {% for c in a.citas %}<span class="cita-chip">[{{ c.id_evidencia }} · {{ c.campo }}]</span>{% endfor %}
+      </li>
+      {% endfor %}
+    </ul>
+  </section>
+
+  <section class="boletin-bloque boletin-hipotesis" aria-label="Hipótesis de impacto">
+    <h3>Hipótesis de impacto ({{ hipotesis | length }}) <span style="font-size: 11px; font-weight: normal; color: var(--outline);">· por verificar, no conclusiones</span></h3>
+    {% if hipotesis %}
+    <ul class="boletin-lista">
+      {% for a in hipotesis %}
+      <li>
+        <span class="item-meta-chip sospechoso">{{ a.tipo }}</span> {{ a.texto }}<br>
+        {% for c in a.citas %}<span class="cita-chip">[{{ c.id_evidencia }} · {{ c.campo }}]</span>{% endfor %}
+      </li>
+      {% endfor %}
+    </ul>
+    {% else %}
+    <p style="font-size: 12px; color: var(--outline); margin: 0;">Ninguna hipótesis quedó respaldada.</p>
+    {% endif %}
+  </section>
+
+  <section class="boletin-bloque" aria-label="Preguntas para el analista">
+    <h3>Preguntas para el analista</h3>
+    <ol class="boletin-lista">{% for q in b.preguntas_analista %}<li>{{ q }}</li>{% endfor %}</ol>
+  </section>
+
+  {% if b.vacios %}
+  <section class="boletin-bloque" aria-label="Vacíos">
+    <h3>Vacíos de información</h3>
+    <ul class="boletin-lista">{% for v in b.vacios %}<li>{{ v }}</li>{% endfor %}</ul>
+  </section>
+  {% endif %}
+
+  {% if resultado.descartadas %}
+  <section class="boletin-bloque" aria-label="Descartadas">
+    <h3 style="color: var(--error);">Afirmaciones descartadas por el validador ({{ resultado.descartadas | length }})</h3>
+    <ul class="boletin-lista">
+      {% for d in resultado.descartadas %}
+      <li><span class="item-meta-chip conflicto">{{ d.motivo | replace('_', ' ') }}</span> {{ d.afirmacion.texto }}</li>
+      {% endfor %}
+    </ul>
+  </section>
+  {% endif %}
+
+  <p class="banca-aviso" role="note"><strong>Aviso.</strong> {{ b.aviso }}</p>
+</article>
+{% endif %}
+
+{% include "_resultado_pie.html" %}

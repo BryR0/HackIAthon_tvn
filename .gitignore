@@ -1,0 +1,50 @@
+# Entornos virtuales (Python venvs)
+.venv/
+*/.venv/
+venv/
+*/venv/
+env/
+*/env/
+ENV/
+*/ENV/
+
+# Variables de entorno y secretos
+.env
+.env.*
+!.env.example
+*/.env
+*/.env.*
+!*/.env.example
+
+# Bytecode y caches de Python
+__pycache__/
+*/__pycache__/
+*/**/__pycache__/
+*.py[cod]
+*$py.class
+
+# Testing, cobertura y linters
+.pytest_cache/
+*/.pytest_cache/
+.pytest_tmp/
+*/.pytest_tmp/
+.coverage
+htmlcov/
+.ruff_cache/
+*/.ruff_cache/
+.mypy_cache/
+*/.mypy_cache/
+
+# Archivos de auditoría y revisiones en ejecución local
+reviews.jsonl
+*/reviews.jsonl
+app/data/reviews.jsonl
+
+# Archivos temporales del sistema y del editor
+.DS_Store
+Thumbs.db
+desktop.ini
+.idea/
+.vscode/
+*.swp
+*.swo

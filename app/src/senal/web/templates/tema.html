@@ -1,0 +1,621 @@
+{% extends "base.html" %}
+{% block titulo %}Ficha {{ tema.id_evento }} · Visión 360°{% endblock %}
+{% block contenido %}
+
+<div class="ficha-subnav">
+  <div class="subnav-left">
+    <a href="/{{ qm }}" class="subnav-btn-volver">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+        <line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/>
+      </svg>
+      <span>Volver a la Bandeja</span>
+    </a>
+    <div class="subnav-id-badge">
+      <span>Evento</span>
+      <strong class="subnav-id-pill">{{ tema.id_evento }}</strong>
+    </div>
+  </div>
+  <div>
+    <span class="subnav-badge-360">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+        <circle cx="12" cy="12" r="10"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/>
+      </svg>
+      <span>Visión 360° Unificada: Editorial TVN + Inteligencia SBP</span>
+    </span>
+  </div>
+</div>
+
+<!-- =======================================================================
+     CABECERA DEL EVENTO (ESTRUCTURA ALINEADA Y SIN DESCUADRES)
+     ======================================================================= -->
+<div class="ficha-header-card">
+  <!-- Fila 1: Metadatos y Badge de Puntuación -->
+  <div style="display: flex; justify-content: space-between; align-items: center; gap: 12px; margin-bottom: 12px; flex-wrap: wrap;">
+    <div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
+      <span class="category-chip">
+        {{ temas_catalogo.get(tema.tema, 'sin tema claro') }}
+      </span>
+
+      <span class="hero-pill-tag" style="font-size: 11px; padding: 3px 10px;">
+        Prioridad {{ tema.puntaje.banda | upper }}
+      </span>
+
+      {% if enlaces_sbp %}
+      <span class="badge-seccion-banca" style="font-size: 11px; padding: 3px 10px;">
+        🏦 Exposición SBP: {{ enlaces_sbp | length }} sector(es)
+      </span>
+      {% endif %}
+    </div>
+
+    <div>
+      <span class="score-badge {{ tema.puntaje.banda }}" style="width: auto; height: auto; padding: 5px 14px; display: inline-flex; flex-direction: row; align-items: center; gap: 6px;">
+        <span class="score-val" style="font-size: 18px;">{{ '%.1f' | format(tema.puntaje.total) }}</span>
+        <span class="score-lbl" style="font-size: 11px;">pts</span>
+      </span>
+    </div>
+  </div>
+
+  <!-- Fila 2: Título principal del evento -->
+  <h1 style="font-size: 24px; line-height: 32px; font-weight: 700; color: var(--primary); margin: 0 0 14px 0; letter-spacing: -0.015em;">
+    {{ tema.titulo }}
+  </h1>
+
+  <!-- Fila 3: Estado de revisión y Barra de Acciones (Perfectamente alineadas en una sola fila) -->
+  <div style="display: flex; justify-content: space-between; align-items: center; gap: 16px; flex-wrap: wrap; padding-top: 12px; border-top: 1px solid var(--border);">
+    <div style="display: flex; align-items: center; gap: 8px; font-size: 13px; color: var(--on-surface-variant);">
+      <span>Estado de revisión:</span>
+      <strong style="color: var(--primary); background: var(--surface-container); padding: 4px 12px; border-radius: var(--radius-full); font-size: 12px;">
+        {{ estado_revision }}
+      </strong>
+    </div>
+
+    <!-- Botonera de Acciones Rápida -->
+    <div style="display: inline-flex; align-items: center; gap: 10px; flex-wrap: wrap;">
+      <button type="button" class="btn-primary" data-abre-modal="modal-generar-informe" style="display: inline-flex; align-items: center; gap: 6px; padding: 7px 14px; font-size: 13px; background: linear-gradient(135deg, var(--secondary) 0%, #003fa4 100%);">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+          <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/>
+        </svg>
+        <span>Generar informe</span>
+      </button>
+
+      <button type="button" class="btn-primary" data-abre-modal="modal-decision-revision" style="display: inline-flex; align-items: center; gap: 6px; padding: 7px 14px; font-size: 13px;">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/>
+        </svg>
+        <span>Registrar decisión</span>
+      </button>
+
+      <button type="button" class="btn-secondary" data-abre-modal="modal-formula" style="display: inline-flex; align-items: center; gap: 6px; padding: 7px 12px; font-size: 13px;">
+        <span>Ver fórmula</span>
+      </button>
+    </div>
+  </div>
+
+  <!-- Fila 4: Alerta de acción recomendada -->
+  <div style="margin-top: 14px; padding: 10px 14px; border-radius: var(--radius-lg); background-color: {% if tema.estado_evidencia != 'suficiente_para_borrador' or tema.sospechoso %}var(--warning-bg){% else %}var(--verified-bg){% endif %}; color: {% if tema.estado_evidencia != 'suficiente_para_borrador' or tema.sospechoso %}var(--warning-text){% else %}var(--verified-text){% endif %}; font-size: 12px; line-height: 18px;" role="note">
+    <strong>Acción recomendada:</strong> {{ tema.accion_recomendada }}.
+    La prioridad ordena la revisión; <strong>no habilita publicación</strong>.
+  </div>
+</div>
+
+<!-- =======================================================================
+     PANEL VISUAL DE INTELIGENCIA Y GRÁFICAS (Dataviz 360°)
+     ======================================================================= -->
+<div class="ficha-visual-grid">
+  <!-- Gráfica 1: Desglose del Algoritmo de Prioridad -->
+  <section class="grafica-card" aria-labelledby="h-grafica-prioridad">
+    <div class="grafica-card-header">
+      <h2 id="h-grafica-prioridad" class="grafica-card-title">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="color: var(--secondary);">
+          <line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/>
+        </svg>
+        Factores de Prioridad Algorítmica
+      </h2>
+      <p class="grafica-card-sub">
+        Contribución de cada variable a los <strong>{{ '%.1f' | format(tema.puntaje.total) }} pts</strong> obtenidos bajo la fórmula <code class="hash-code">30 × R + 25 × I + 20 × U + 15 × N + 10 × E</code>.
+      </p>
+    </div>
+
+    <div class="factor-rows-container">
+      {% for f in desglose_score %}
+      <div class="factor-row" style="margin-bottom: 8px;">
+        <div class="factor-row-head">
+          <span class="factor-row-title" style="display: flex; align-items: center;">
+            <span class="factor-badge-key" style="background-color: {{ f.color }} !important; color: #ffffff !important; width: 22px; height: 22px; display: inline-flex; align-items: center; justify-content: center; border-radius: 4px; font-weight: 800; font-size: 11px; margin-right: 6px; flex-shrink: 0;">{{ f.clave }}</span>
+            <span style="font-weight: 600; color: var(--primary);">{{ f.nombre }}</span>
+          </span>
+          <span class="factor-row-score">
+            <strong style="color: var(--primary);">{{ f.aporte }}</strong>
+            <span style="color: var(--outline);">/ {{ f.peso }} pts</span>
+            <span style="font-size: 11px; color: var(--on-surface-variant); margin-left: 4px; font-weight: 600;">({{ f.pct_aporte }}%)</span>
+          </span>
+        </div>
+        <div class="factor-row-track" style="height: 10px; width: 100%; background-color: #e2e8f0; border-radius: 999px; overflow: hidden; position: relative; margin-top: 5px;" title="{{ f.descripcion }}">
+          <div class="factor-row-fill" style="width: {{ f.pct_aporte }}%; height: 100%; min-height: 10px; background-color: {{ f.color }} !important; border-radius: 999px; display: block;"></div>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+
+    <div class="score-total-banner">
+      <div>
+        <span style="font-size: 11px; font-weight: 700; text-transform: uppercase; color: var(--on-surface-variant); display: block;">Total Calibrado</span>
+        <strong style="font-size: 20px; color: var(--primary);">{{ '%.1f' | format(tema.puntaje.total) }} / 100 puntos</strong>
+      </div>
+      <span class="score-badge {{ tema.puntaje.banda }}" style="padding: 6px 16px; font-size: 13px; font-weight: 700; white-space: nowrap; width: auto; height: auto; display: inline-flex; align-items: center; justify-content: center;">
+        Banda {{ tema.puntaje.banda | upper }}
+      </span>
+    </div>
+  </section>
+
+  <!-- Gráfica 2: Cartera Crediticia de Panamá SBP (Superintendencia de Bancos) -->
+  <section class="grafica-card" aria-labelledby="h-grafica-sbp">
+    <div class="grafica-card-header">
+      <div style="display: flex; justify-content: space-between; align-items: flex-start; gap: 8px;">
+        <div>
+          <h2 id="h-grafica-sbp" class="grafica-card-title">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="color: #d97706;">
+              <rect x="2" y="7" width="20" height="14" rx="2" ry="2"/>
+              <path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/>
+            </svg>
+            Exposición Crediticia SBP de Panamá
+          </h2>
+          <p class="grafica-card-sub">
+            Saldos del Sistema Bancario Nacional (informe SBP). Los sectores vinculados al evento se destacan como <strong>hipótesis de impacto</strong>.
+          </p>
+        </div>
+        <span class="badge-seccion-banca" style="font-size: 10px;">{{ version_banca }}</span>
+      </div>
+    </div>
+
+    {% if enlaces_sbp %}
+    <div class="sbp-card-foco-tag">
+      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+        <circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/>
+      </svg>
+      <span>Sectores en Foco: <strong>{{ enlaces_sbp | map(attribute='nombre') | map('replace', 'Crédito local SBN · ', '') | join(', ') }}</strong></span>
+    </div>
+    {% endif %}
+
+    <div class="sbp-bars-container">
+      {% for s in sectores_grafica %}
+      <div class="sbp-bar-row {% if s.es_impactado %}en-foco{% endif %}" title="Sector {{ s.nombre }}: {{ s.valor_fmt }} (cierre {{ s.periodo }})">
+        <div class="sbp-bar-head">
+          <span class="sbp-bar-title">
+            <span>{{ s.nombre }}</span>
+            {% if s.es_impactado %}
+              <span class="hero-pill-tag" style="background: #f59e0b; color: #ffffff; font-size: 9px; padding: 1px 6px;">EN FOCO</span>
+            {% endif %}
+          </span>
+          <span class="sbp-bar-meta">
+            <strong>{{ s.valor_fmt }}</strong>
+            {% if s.variacion_pct is not none %}
+              <span class="sbp-var-badge {% if s.variacion_pct >= 0 %}pos{% else %}neg{% endif %}">
+                {{ s.variacion_str }}
+              </span>
+            {% endif %}
+          </span>
+        </div>
+        <div class="sbp-track">
+          <div class="sbp-fill" style="width: {{ s.ancho_pct }}%;"></div>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+  </section>
+</div>
+
+<!-- =======================================================================
+     REJILLA DE EVIDENCIA Y FUENTES
+     ======================================================================= -->
+<div class="ficha-grid-2col" style="margin-bottom: var(--space-xl);">
+  <!-- Qué se reporta y Quién lo reporta -->
+  <section class="panel-card" aria-labelledby="h-reporta">
+    <h2 id="h-reporta" style="font-size: 16px; font-weight: 700; color: var(--primary); margin-top: 0; margin-bottom: 8px;">
+      Qué se reporta
+    </h2>
+    <p style="font-weight: 700; font-size: 15px; color: var(--primary); margin-bottom: 6px;">{{ tema.titulo }}</p>
+    <p style="font-size: 12px; color: var(--on-surface-variant); margin-bottom: 12px;">
+      {{ tema.noticias | length }} nota(s) agrupadas como un mismo evento.
+      Primera aparición: <strong>{{ tema.fecha_referencia | hora }}</strong> (Hora de Panamá).
+    </p>
+
+    <div style="padding: 10px 12px; border-radius: var(--radius-md); background-color: var(--surface-container-low); border: 1px solid var(--border); font-size: 12px; color: var(--on-surface-variant); margin-bottom: 16px;">
+      Basado únicamente en titular/metadatos: el sistema no leyó los artículos completos.
+    </div>
+
+    <h3 id="h-quien" style="font-size: 14px; font-weight: 700; color: var(--primary); margin: 16px 0 8px 0;">
+      Quién lo reporta
+    </h3>
+    <div class="tabla-scroll">
+      <table class="tvn-table">
+        <thead>
+          <tr>
+            <th style="width: 80px;">ID</th>
+            <th style="width: 130px;">Medio</th>
+            <th style="width: 140px;">Fecha</th>
+            <th>Titular</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for n in tema.noticias %}
+          <tr>
+            <td><code class="hash-code">{{ n.id_noticia }}</code></td>
+            <td><strong>{{ n.medio }}</strong></td>
+            <td style="font-size: 11px;">
+              {% if n.fecha_publicacion %}
+                {{ n.fecha_publicacion | hora }}
+              {% else %}
+                {{ n.fecha_deteccion | hora }}
+              {% endif %}
+            </td>
+            <td>
+              <a href="{{ n.url }}" rel="noopener noreferrer" target="_blank" style="font-weight: 600; font-size: 12px;">
+                {{ n.titulo }}
+              </a>
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- Qué está respaldado y Qué falta comprobar -->
+  <section class="panel-card" aria-labelledby="h-respaldo">
+    <h2 id="h-respaldo" style="font-size: 16px; font-weight: 700; color: var(--primary); margin-top: 0; margin-bottom: 8px;">
+      Qué está respaldado
+    </h2>
+    <p style="font-size: 13px; margin-bottom: 8px;">
+      <strong>{{ tema.procedencias }}</strong> procedencia(s) independiente(s) de {{ tema.noticias | length }} nota(s):
+      la misma agencia o un titular replicado cuentan una sola vez.
+    </p>
+    <p style="font-size: 13px; margin-bottom: 12px;">
+      Estado de evidencia: <strong>{{ tema.estado_evidencia | replace('_', ' ') }}</strong>
+      {% if tema.fuente_oficial %}
+        &middot; <span class="item-meta-chip oficial">incluye fuente oficial</span>
+      {% endif %}
+    </p>
+
+    {% for e in tema.enlaces_indicadores %}
+    <div style="background: var(--surface-container-low); border: 1px solid var(--border); border-radius: var(--radius-md); padding: 10px 14px; margin-bottom: 8px; font-size: 12px;">
+      <strong>{{ e.nombre }} ({{ e.pais_iso3 }}, {{ e.anio }}): {{ e.valor }} {{ e.unidad }}</strong><br>
+      <span style="color: var(--outline);">{{ e.id_evidencia }} &middot; {{ e.limitacion }} &middot; {{ e.licencia }}</span>
+    </div>
+    {% endfor %}
+
+    {% for s in tema.enlaces_sismos %}
+    <div style="background: var(--surface-container-low); border: 1px solid var(--border); border-radius: var(--radius-md); padding: 10px 14px; margin-bottom: 8px; font-size: 12px;">
+      <strong>Sismo M{{ s.magnitude }} &middot; {{ s.place }}</strong><br>
+      <span style="color: var(--outline);">{{ s.id_evidencia }} &middot; {{ s.limitacion }}</span>
+    </div>
+    {% endfor %}
+
+    <!-- Series SBP como Hipótesis -->
+    {% if enlaces_sbp %}
+    <h3 style="font-size: 13px; font-weight: 700; color: var(--primary); margin: 14px 0 8px 0;">
+      Contexto SBP &middot; sectores potencialmente relacionados (hipótesis, {{ version_banca }})
+    </h3>
+    {% for e in enlaces_sbp %}
+    <div class="serie-sbp">
+      <strong>{{ e.nombre }}: {{ '{:,.1f}'.format(e.valor) }} {{ e.unidad }}</strong>
+      {% if e.variacion_pct is not none %}&middot; {{ e.variacion_pct }} % interanual{% endif %}<br>
+      <span class="meta">{{ e.id_evidencia }} &middot; página {{ e.pagina_pdf }} del PDF &middot; {{ e.limitacion }}</span>
+    </div>
+    {% endfor %}
+    {% endif %}
+
+    <h2 id="h-falta" style="font-size: 16px; font-weight: 700; color: var(--primary); margin-top: 18px; margin-bottom: 8px;">
+      Qué falta comprobar
+    </h2>
+    <ul style="padding-left: 20px; line-height: 1.7; font-size: 13px; margin-bottom: 0;">
+      <li>Leer el artículo original: aquí solo hay titulares y metadatos.</li>
+      {% if tema.estado_evidencia != 'suficiente_para_borrador' %}
+      <li>Conseguir una segunda procedencia independiente o una fuente oficial.</li>
+      {% endif %}
+      {% for c in tema.contradicciones %}
+      <li>
+        <strong style="color: var(--error);">Cifras incompatibles ({{ c.unidad }}), revisión pendiente:</strong><br>
+        {% for v in c.versiones %}
+          <span class="item-meta-chip conflicto">{{ v.id_fuente }}: {{ v.fragmento }}</span>
+        {% endfor %}
+      </li>
+      {% endfor %}
+      {% if tema.sospechoso %}
+      <li>
+        <strong style="color: var(--warning-amber);">Contenido sospechoso:</strong> una fuente contiene instrucciones dirigidas a sistemas. Se trató como dato, no como orden.
+      </li>
+      {% endif %}
+    </ul>
+  </section>
+</div>
+
+<!-- =======================================================================
+     SECCIÓN DE INFORMES DE DECISIÓN (EDITORIAL TVN Y BANCA SBP)
+     ======================================================================= -->
+
+{% if not borrador and not boletin %}
+<!-- Caso: Ninguno generado aún -> Un único contenedor limpio y sin duplicidad -->
+<section class="panel-card" style="text-align: center; padding: 44px 24px; margin-bottom: var(--space-xl); background: var(--surface-card); border: 1px dashed var(--border); border-radius: var(--radius-2xl);">
+  <div style="width: 56px; height: 56px; border-radius: 50%; background: var(--surface-container); display: flex; align-items: center; justify-content: center; margin: 0 auto 16px auto; color: var(--secondary);">
+    <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+      <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/>
+    </svg>
+  </div>
+  <h2 style="font-size: 20px; font-weight: 700; color: var(--primary); margin: 0 0 8px 0;">Informe de Decisión &amp; Cobertura</h2>
+  <p style="font-size: 13px; color: var(--on-surface-variant); max-width: 560px; margin: 0 auto 22px auto; line-height: 22px;">
+    Aún no se ha generado el informe para este evento. Puedes redactar el <strong>paquete editorial para TVN Media</strong>, el <strong>boletín de entorno bancario</strong> o <strong>ambos de forma simultánea</strong>.
+  </p>
+  <button type="button" class="btn-primary" data-abre-modal="modal-generar-informe" style="padding: 10px 24px; font-size: 14px; background: linear-gradient(135deg, var(--secondary) 0%, #003fa4 100%);">
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="margin-right: 6px;">
+      <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/>
+    </svg>
+    Generar Informe con IA
+  </button>
+</section>
+{% endif %}
+
+{% if borrador %}
+<!-- Paquete Editorial Generado -->
+<section class="panel-card panel-paquete-editorial" aria-labelledby="h-borrador" style="margin-bottom: var(--space-xl);">
+  <div style="display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 16px; margin-bottom: 16px; border-bottom: 1px solid var(--border); padding-bottom: 12px;">
+    <div>
+      <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 4px;">
+        <span class="badge-seccion-editorial">🎬 Redacción TVN Media</span>
+        <h2 id="h-borrador" style="font-size: 18px; font-weight: 700; color: var(--primary); margin: 0;">
+          Paquete Editorial (Borrador de Cobertura)
+        </h2>
+      </div>
+      <span style="font-size: 12px; color: var(--outline);">Briefing, Guion audiovisual (45–60s) y Copy digital &middot; Motor: {{ llm }}</span>
+    </div>
+
+    <form method="post" action="/tema/{{ tema.id_evento }}/borrador" style="margin: 0;">
+      <input type="hidden" name="csrf" value="{{ csrf }}">
+      <button type="submit" class="btn-primary">
+        Regenerar borrador con citas
+      </button>
+      <div class="progress-line"><div class="progress-line-fill"></div></div>
+    </form>
+  </div>
+
+  {% with resultado=borrador, observaciones=observaciones_borrador, hipotesis=hipotesis_borrador %}
+    {% include "_paquete.html" %}
+  {% endwith %}
+</section>
+{% endif %}
+
+{% if boletin %}
+<!-- Boletín Bancario Generado -->
+<section class="panel-card panel-paquete-banca" aria-labelledby="h-boletin" style="margin-bottom: var(--space-xl);">
+  <div style="display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 16px; margin-bottom: 16px; border-bottom: 1px solid var(--border); padding-bottom: 12px;">
+    <div>
+      <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 4px;">
+        <span class="badge-seccion-banca">🏦 Inteligencia Bancaria SBP</span>
+        <h2 id="h-boletin" style="font-size: 18px; font-weight: 700; color: var(--primary); margin: 0;">
+          Boletín de Entorno (Análisis de Riesgo &amp; Cartera)
+        </h2>
+      </div>
+      <span style="font-size: 12px; color: var(--outline);">Sectores potencialmente expuestos, horizonte temporal y preguntas para el analista &middot; {{ aviso_sbp }}</span>
+    </div>
+
+    <form method="post" action="/tema/{{ tema.id_evento }}/boletin" style="margin: 0;">
+      <input type="hidden" name="csrf" value="{{ csrf }}">
+      <button type="submit" class="btn-primary" style="background-color: #d97706;">
+        Regenerar boletín con citas
+      </button>
+      <div class="progress-line"><div class="progress-line-fill"></div></div>
+    </form>
+  </div>
+
+  {% with resultado=boletin, observaciones=observaciones_boletin, hipotesis=hipotesis_boletin %}
+    {% include "_boletin.html" %}
+  {% endwith %}
+</section>
+{% endif %}
+
+<!-- =======================================================================
+     HISTORIAL AUDITADO DE DECISIONES
+     ======================================================================= -->
+{% if historial %}
+<section class="panel-card" aria-labelledby="h-historial" style="margin-bottom: var(--space-xl);">
+  <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px; border-bottom: 1px solid var(--border); padding-bottom: 10px;">
+    <div>
+      <h2 id="h-historial" style="font-size: 16px; font-weight: 700; color: var(--primary); margin: 0 0 2px 0;">
+        Historial de revisiones auditado
+      </h2>
+      <span style="font-size: 12px; color: var(--outline);">Decisiones tomadas sobre este evento en el registro inmutable</span>
+    </div>
+    <button type="button" class="btn-secondary" data-abre-modal="modal-decision-revision" style="font-size: 12px; padding: 5px 12px;">
+      + Registrar nueva decisión
+    </button>
+  </div>
+  <ul class="boletin-lista">
+    {% for r in historial %}
+    <li>
+      <strong>{{ r.estado | replace('_', ' ') }}</strong> por <span class="hash-code">{{ r.revisor }}</span> el {{ r.momento_utc | hora }}
+      {% if r.nota %}&mdash; <em>{{ r.nota }}</em>{% endif %}
+    </li>
+    {% endfor %}
+  </ul>
+</section>
+{% endif %}
+
+<!-- =======================================================================
+     MODALES ACCESIBLES (NATIVOS, OCULTOS POR DEFECTO CON .modal-dialog)
+     ======================================================================= -->
+
+<!-- MODAL 1: GENERAR INFORME (Permite decidir entre Editorial, Banca o 360°) -->
+<div id="modal-generar-informe" class="modal-dialog" role="dialog" aria-modal="true" aria-hidden="true" aria-labelledby="modal-gen-titulo">
+  <div class="modal-contenedor" style="max-width: 640px;">
+    <div class="modal-cabecera">
+      <div class="modal-cabecera-info">
+        <span class="modal-paso-badge" style="background: var(--secondary); color: #ffffff;">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+            <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/>
+          </svg>
+        </span>
+        <div>
+          <h3 id="modal-gen-titulo" class="modal-titulo" style="font-size: 17px; margin: 0;">Generar Informe con IA</h3>
+          <span style="font-size: 11px; color: var(--on-surface-variant);">Selecciona el tipo de producto periodístico o bancario</span>
+        </div>
+      </div>
+      <button type="button" class="modal-cerrar" data-cierra-modal="modal-generar-informe" aria-label="Cerrar">&times;</button>
+    </div>
+
+    <div class="modal-cuerpo" style="padding: 22px 26px;">
+      <p style="font-size: 13px; color: var(--on-surface-variant); margin: 0 0 16px 0;">
+        El motor de IA contrastará las notas agrupadas con los datos de referencia para generar el informe elegido:
+      </p>
+
+      <div class="modal-opciones-col">
+        <!-- Opción 1: Paquete Editorial TVN -->
+        <form method="post" action="/tema/{{ tema.id_evento }}/borrador" style="margin: 0;">
+          <input type="hidden" name="csrf" value="{{ csrf }}">
+          <div class="modal-opcion-card">
+            <div class="modal-opcion-head">
+              <div class="modal-opcion-meta">
+                <span class="badge-seccion-editorial" style="width: fit-content; margin-bottom: 4px; font-size: 11px;">🎬 Redacción TVN Media</span>
+                <h4 class="modal-opcion-titulo">Paquete Editorial Noticioso</h4>
+                <p class="modal-opcion-desc">Brief ejecutivo, guion de 45–60s para teleprompter y copy digital para redes con citas y fuentes verificadas.</p>
+              </div>
+              <button type="submit" class="modal-opcion-btn btn-primary" style="font-size: 12px; padding: 7px 16px;">
+                {{ 'Regenerar' if borrador else 'Generar' }} &rarr;
+              </button>
+            </div>
+          </div>
+        </form>
+
+        <!-- Opción 2: Boletín Bancario SBP -->
+        <form method="post" action="/tema/{{ tema.id_evento }}/boletin" style="margin: 0;">
+          <input type="hidden" name="csrf" value="{{ csrf }}">
+          <div class="modal-opcion-card" style="border-color: #fde68a; background: #fffdf5;">
+            <div class="modal-opcion-head">
+              <div class="modal-opcion-meta">
+                <span class="badge-seccion-banca" style="width: fit-content; margin-bottom: 4px; font-size: 11px;">🏦 Inteligencia Bancaria SBP</span>
+                <h4 class="modal-opcion-titulo" style="color: #b45309;">Boletín de Entorno y Riesgo</h4>
+                <p class="modal-opcion-desc">Series de cartera crediticia nacional, sectores expuestos, horizonte temporal y 3 preguntas clave para analistas de riesgo.</p>
+              </div>
+              <button type="submit" class="modal-opcion-btn btn-primary" style="background-color: #d97706; font-size: 12px; padding: 7px 16px;">
+                {{ 'Regenerar' if boletin else 'Generar' }} &rarr;
+              </button>
+            </div>
+          </div>
+        </form>
+
+        <!-- Opción 3: Ambos simultáneos 360° -->
+        <form method="post" action="/tema/{{ tema.id_evento }}/generar_todo" style="margin: 0;">
+          <input type="hidden" name="csrf" value="{{ csrf }}">
+          <div class="modal-opcion-card destacada">
+            <div class="modal-opcion-head">
+              <div class="modal-opcion-meta">
+                <span class="hero-pill-tag" style="background: var(--secondary); color: #ffffff; width: fit-content; margin-bottom: 4px; font-size: 11px;">⚡ RECOMENDADO 360°</span>
+                <h4 class="modal-opcion-titulo">Informe Completo 360° (Editorial + Banca)</h4>
+                <p class="modal-opcion-desc">Genera en paralelo ambos análisis para disponer de la perspectiva periodística y financiera simultáneamente en una sola pantalla.</p>
+              </div>
+              <button type="submit" class="modal-opcion-btn btn-primary" style="background: linear-gradient(135deg, var(--secondary) 0%, #003fa4 100%); font-size: 13px; padding: 9px 18px;">
+                Generar Todo &rarr;
+              </button>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL 2: REGISTRO DE DECISIÓN DE REVISIÓN -->
+<div id="modal-decision-revision" class="modal-dialog" role="dialog" aria-modal="true" aria-hidden="true" aria-labelledby="modal-decision-titulo">
+  <div class="modal-contenedor" style="max-width: 620px;">
+    <div class="modal-cabecera">
+      <div class="modal-cabecera-info">
+        <span class="modal-paso-badge" style="background: var(--secondary); color: #ffffff;">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+            <path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/>
+          </svg>
+        </span>
+        <div>
+          <h3 id="modal-decision-titulo" class="modal-titulo" style="font-size: 17px; margin: 0;">Registrar Decisión Humana</h3>
+          <span style="font-size: 11px; color: var(--on-surface-variant);">Auditoría inmutable &middot; Gobernanza editorial TVN</span>
+        </div>
+      </div>
+      <button type="button" class="modal-cerrar" data-cierra-modal="modal-decision-revision" aria-label="Cerrar">&times;</button>
+    </div>
+
+    <div class="modal-cuerpo" style="padding: 24px 28px;">
+      <div class="modal-context-box">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="color: var(--secondary); flex-shrink: 0;">
+          <circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/>
+        </svg>
+        <div>
+          <span style="font-size: 11px; text-transform: uppercase; font-weight: 700; color: var(--secondary); letter-spacing: 0.04em; display: block;">Evento en Revisión</span>
+          <strong style="color: #0f172a; font-size: 13px;">{{ tema.id_evento }}</strong>: {{ tema.titulo | truncate(65) }}
+        </div>
+      </div>
+
+      <form method="post" action="/tema/{{ tema.id_evento }}/revision">
+        <input type="hidden" name="csrf" value="{{ csrf }}">
+        <input type="hidden" name="modalidad" value="{{ modalidad }}">
+        
+        <div class="modal-form-group">
+          <label class="modal-form-label" for="m-estado">
+            <span class="modal-form-label-title">
+              <span class="label-step-num">1</span>
+              <span>Estado de la decisión</span>
+            </span>
+          </label>
+          <select id="m-estado" name="estado" class="modal-form-select">
+            {% for e in estados %}
+            <option value="{{ e }}" {% if e == estado_revision %}selected{% endif %}>
+              {% if e == 'aprobado_borrador' %}🟢 Aprobado para borrador
+              {% elif e == 'en_revision' %}🟡 En revisión activa
+              {% elif e == 'nuevo' %}🔵 Nuevo en bandeja
+              {% elif e == 'descartado' %}⚪ Descartado
+              {% elif e == 'corregido' %}🟣 Corregido
+              {% else %}{{ e | replace('_', ' ') | capitalize }}
+              {% endif %}
+            </option>
+            {% endfor %}
+          </select>
+          <span class="modal-form-helper">Determina si el evento procede a borrador de cobertura o se archiva.</span>
+        </div>
+
+        <div class="modal-form-group">
+          <label class="modal-form-label" for="m-revisor">
+            <span class="modal-form-label-title">
+              <span class="label-step-num">2</span>
+              <span>Persona revisora responsable</span>
+            </span>
+          </label>
+          <input id="m-revisor" type="text" name="revisor" class="modal-form-input" required maxlength="120" placeholder="Ej.: Ana Ramos (Editora Jefe) o Carlos Vega (Analista Senior)">
+          <span class="modal-form-helper">Nombre y cargo institucional que certifica esta resolución en el log inmutable.</span>
+        </div>
+
+        <div class="modal-form-group">
+          <label class="modal-form-label" for="m-nota">
+            <span class="modal-form-label-title">
+              <span class="label-step-num">3</span>
+              <span>Nota o justificación editorial</span>
+            </span>
+            <span class="label-badge-audit">Auditoría inmutable</span>
+          </label>
+          <textarea id="m-nota" name="nota" class="modal-textarea-amplio" maxlength="1000" placeholder="Escribe aquí los motivos periodísticos, comprobaciones realizadas, fuentes independientes contrastadas o pautas para la mesa de redacción..."></textarea>
+          <span class="modal-form-helper">Justificación técnica o editorial guardada permanentemente en el registro.</span>
+        </div>
+
+        <div style="display: flex; justify-content: flex-end; align-items: center; gap: 12px; margin-top: 24px; padding-top: 18px; border-top: 1px solid #e2e8f0;">
+          <button type="button" class="btn-secondary" data-cierra-modal="modal-decision-revision" style="padding: 10px 20px; font-size: 13px; font-weight: 600;">
+            Cancelar
+          </button>
+          <button type="submit" class="btn-primary" style="padding: 10px 24px; font-size: 13px; font-weight: 600; display: inline-flex; align-items: center; gap: 8px;">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+              <polyline points="20 6 9 17 4 12"/>
+            </svg>
+            <span>Guardar decisión auditada</span>
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+{% endblock %}

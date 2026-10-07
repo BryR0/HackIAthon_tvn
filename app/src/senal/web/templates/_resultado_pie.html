@@ -1,0 +1,29 @@
+{# Común a borrador editorial y boletín bancario: redactor, costos, avisos y evidencia. #}
+<div style="background: var(--surface-container-low); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 12px 16px; margin-top: 16px;">
+  <p style="font-size: 11px; color: var(--outline); margin: 0;">
+    Redactor: <strong>{{ resultado.proveedor }}</strong>{% if resultado.modelo %} ({{ resultado.modelo }}){% endif %} &middot;
+    búsqueda <strong>{{ resultado.modo_busqueda }}</strong> &middot;
+    cobertura de citas <strong>{{ '%.0f' | format(resultado.cobertura_citas * 100) }}%</strong> &middot;
+    tokens {{ resultado.tokens_entrada }}+{{ resultado.tokens_salida }} &middot;
+    {{ '%.1f' | format(resultado.latencia_s) }} s &middot; costo US$ {{ '%.4f' | format(resultado.costo_usd) }}
+  </p>
+</div>
+
+{% for a in resultado.avisos %}
+  <p style="margin-top: 10px; font-size: 12px; color: var(--warning-text); background-color: var(--warning-bg); padding: 8px 12px; border-radius: var(--radius-md);">{{ a }}</p>
+{% endfor %}
+
+{% if resultado.evidencias %}
+<details style="margin-top: 16px; background: #ffffff; border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 12px 16px;">
+  <summary style="font-size: 13px; font-weight: 700; cursor: pointer; color: var(--primary);">
+    Evidencia recuperada ({{ resultado.evidencias | length }})
+  </summary>
+  <ul style="margin-top: 10px; padding-left: 20px; font-size: 12px; line-height: 1.7; color: var(--on-surface);">
+    {% for e in resultado.evidencias %}
+      <li>
+        <span style="font-family: var(--font-mono); color: var(--secondary); font-weight: 600;">{{ e.id }} &middot; {{ e.tipo }}</span>: {{ e.texto }}
+      </li>
+    {% endfor %}
+  </ul>
+</details>
+{% endif %}
