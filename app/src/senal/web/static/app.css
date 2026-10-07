@@ -3027,6 +3027,108 @@ footer.tvn-footer {
   letter-spacing: 0.02em;
 }
 
+/* ==========================================================================
+   Módulo de Auditoría y Calidad del Snapshot (/calidad)
+   ========================================================================== */
+.calidad-header-card {
+  background: var(--surface-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-xl);
+  padding: 24px 28px;
+  box-shadow: var(--shadow-level1);
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.calidad-header-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+
+.calidad-audit-badge-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-bottom: 8px;
+}
+
+.calidad-title {
+  font-size: 26px;
+  line-height: 34px;
+  font-weight: 700;
+  color: var(--primary);
+  margin: 0;
+  letter-spacing: -0.015em;
+}
+
+.calidad-actions-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.calidad-meta-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 14px;
+  margin-top: 4px;
+}
+
+.calidad-meta-card {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  background-color: var(--surface-container-low);
+  border: 1px solid var(--border);
+  padding: 12px 18px;
+  border-radius: var(--radius-lg);
+}
+
+.calidad-meta-lbl {
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--on-surface-variant);
+}
+
+.calidad-meta-val {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--on-surface);
+}
+
+.calidad-kpi-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 16px;
+}
+
+.calidad-kpi-card {
+  background: var(--surface-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-xl);
+  padding: 18px 20px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 12px;
+  box-shadow: var(--shadow-level1);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.calidad-kpi-card:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-level2);
+}
+
+
 
 
 

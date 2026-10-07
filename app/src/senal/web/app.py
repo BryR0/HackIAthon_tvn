@@ -27,7 +27,7 @@ from typing import Annotated, Any
 
 from dotenv import load_dotenv
 from fastapi import FastAPI, Form, HTTPException, Request
-from fastapi.responses import HTMLResponse, JSONResponse, RedirectResponse, Response
+from fastapi.responses import FileResponse, HTMLResponse, JSONResponse, RedirectResponse, Response
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 from starlette.middleware.trustedhost import TrustedHostMiddleware
@@ -662,6 +662,17 @@ def crear_app(config: Config) -> FastAPI:
                 reporte=estado.reporte,
             ),
         )
+
+    @app.get("/data/processed/{archivo}")
+    def descargar_archivo_procesado(archivo: str) -> FileResponse:
+        ruta = (config.procesado / archivo).resolve()
+        # Evitar path traversal fuera del directorio procesado
+        if not str(ruta).startswith(str(config.procesado.resolve())):
+            raise HTTPException(status_code=403, detail="Ruta no autorizada")
+        if not ruta.is_file():
+            raise HTTPException(status_code=404, detail="Archivo no encontrado")
+        media_type = "application/json" if archivo.endswith(".json") else "application/octet-stream"
+        return FileResponse(ruta, media_type=media_type, filename=archivo)
 
     @app.get("/salud")
     def salud() -> JSONResponse:

@@ -3,56 +3,56 @@
 {% block contenido %}
 
 <div style="margin-top: var(--space-lg); display: flex; flex-direction: column; gap: var(--space-xl);">
-  <!-- 1. Header de Auditoría y Metadatos  -->
-  <div class="panel-card" style="display: flex; flex-direction: column; gap: var(--space-md);">
-    <div style="display: flex; flex-wrap: wrap; justify-content: space-between; align-items: flex-start; gap: var(--space-md);">
+  <!-- 1. Header de Auditoría y Metadatos -->
+  <div class="calidad-header-card">
+    <div class="calidad-header-top">
       <div>
-        <div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap; margin-bottom: 6px;">
-          <span class="hero-pill-tag" style="font-size: 10px; padding: 2px 8px;">Auditoría Técnica</span>
-          <span style="display: inline-flex; align-items: center; gap: 5px; color: var(--secondary); font-size: 11px; font-weight: 600;">
+        <div class="calidad-audit-badge-row">
+          <span class="hero-pill-tag" style="font-size: 10px; padding: 3px 10px; font-weight: 700; letter-spacing: 0.04em;">Auditoría Técnica</span>
+          <span style="display: inline-flex; align-items: center; gap: 6px; color: var(--secondary); font-size: 12px; font-weight: 600;">
             <span class="tvn-hub-dot"></span>
             Integridad Verificada
           </span>
           <span style="color: var(--outline-variant);">&bull;</span>
-          <span style="font-size: 11px; color: var(--on-surface-variant);">Snapshot Inmutable</span>
+          <span style="font-size: 12px; color: var(--on-surface-variant);">Snapshot Inmutable</span>
         </div>
 
-        <h1 style="font-size: 26px; line-height: 34px; font-weight: 700; color: var(--primary); margin: 0 0 8px 0; letter-spacing: -0.015em;">
+        <h1 class="calidad-title">
           Datos y calidad del snapshot
         </h1>
-
-        <!-- Metadata pills ribbon -->
-        <div style="display: flex; flex-wrap: wrap; align-items: center; gap: 8px; font-size: 12px;">
-          <div style="display: flex; align-items: center; gap: 6px; background-color: var(--surface-container); padding: 4px 10px; border-radius: var(--radius-lg);">
-            <strong style="color: var(--primary);">Paquete:</strong>
-            <span style="font-family: var(--font-mono);">{{ manifest.version }}</span>
-          </div>
-          <div style="display: flex; align-items: center; gap: 6px; background-color: var(--surface-container); padding: 4px 10px; border-radius: var(--radius-lg);">
-            <strong style="color: var(--primary);">Corte:</strong>
-            <span>{{ manifest.fecha_corte_utc | hora }} (Hora de Panamá)</span>
-          </div>
-          <div style="display: flex; align-items: center; gap: 6px; background-color: var(--surface-container); padding: 4px 10px; border-radius: var(--radius-lg);">
-            <strong style="color: var(--primary);">Ventana:</strong>
-            <span>{{ manifest.ventana_noticias[0] | hora }} &rarr; {{ manifest.ventana_noticias[1] | hora }}</span>
-          </div>
-        </div>
       </div>
 
       <!-- Action Buttons -->
-      <div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
-        <button type="button" class="btn-secondary" onclick="alert('Huella SHA-256 verificada contra el manifiesto inmutable.')">
+      <div class="calidad-actions-row">
+        <button type="button" class="btn-secondary" onclick="alert('Huella SHA-256 verificada contra el manifiesto inmutable.')" style="padding: 9px 16px; font-size: 13px;">
           <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
             <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
           </svg>
           <span>Verificar SHA-256</span>
         </button>
 
-        <a href="/data/processed/reporte_calidad.json" class="btn-primary" download>
+        <a href="/static/reporte_calidad.json" class="btn-primary" download="reporte_calidad.json" style="padding: 9px 16px; font-size: 13px;">
           <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
             <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/>
           </svg>
           <span>Descargar reporte (JSON)</span>
         </a>
+      </div>
+    </div>
+
+    <!-- Metadata Cards Grid (bien espaciado y legible) -->
+    <div class="calidad-meta-grid">
+      <div class="calidad-meta-card">
+        <span class="calidad-meta-lbl">Paquete de Evidencias</span>
+        <span class="calidad-meta-val" style="font-family: var(--font-mono); color: var(--primary);">{{ manifest.version }}</span>
+      </div>
+      <div class="calidad-meta-card">
+        <span class="calidad-meta-lbl">Fecha y Corte Auditado</span>
+        <span class="calidad-meta-val">{{ manifest.fecha_corte_utc | hora }} (Hora de Panamá)</span>
+      </div>
+      <div class="calidad-meta-card">
+        <span class="calidad-meta-lbl">Ventana Temporal de Noticias</span>
+        <span class="calidad-meta-val">{{ manifest.ventana_noticias[0] | hora }} &rarr; {{ manifest.ventana_noticias[1] | hora }}</span>
       </div>
     </div>
   </div>

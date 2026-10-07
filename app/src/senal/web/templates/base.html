@@ -4,8 +4,8 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>{% block titulo %}Señal TVN{% endblock %} · Señal TVN</title>
-  <link rel="stylesheet" href="/static/app.css?v=20261007_v4">
-  <script src="/static/app.js?v=20261007_v4" defer></script>
+  <link rel="stylesheet" href="/static/app.css?v=20261007_v5">
+  <script src="/static/app.js?v=20261007_v5" defer></script>
 </head>
 <body>
   <!-- Header Institucional  (64px) -->
@@ -22,7 +22,7 @@
           <div class="tvn-brand-meta">
             <div class="tvn-brand-title-wrap">
               <span class="tvn-brand-title">Señal TVN</span>
-              <span class="tvn-brand-tag" style="background: linear-gradient(135deg, #0050cc 0%, #002d72 100%); color: #fff;">360° UNIFICADO</span>
+              
             </div>
             <span class="tvn-brand-sub">Inteligencia Editorial &middot; TVN Media</span>
           </div>
@@ -50,13 +50,6 @@
       <div class="tvn-nav-right">
         {# Marcador de compatibilidad de pruebas para ADR 0003 en modo 360° #}
         <span data-modalidad="{{ modalidad }}" style="display: none;"></span>
-
-        <div class="tvn-brand-badge-360" title="Plataforma Integrada: Redacción TVN Media + Inteligencia Bancaria SBP">
-          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
-            <circle cx="12" cy="12" r="10"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/>
-          </svg>
-          <span>Visión 360° Integrada</span>
-        </div>
 
         <div class="tvn-snapshot-pill" title="Corte auditado del snapshot (Hora de Panamá)">
           <span class="tvn-pulse-dot"></span>
@@ -87,7 +80,7 @@
       <div class="tvn-context-left">
         <span class="tvn-tag-hub">
           <span class="tvn-hub-dot"></span>
-          Mesa 360° · Redacción TVN + SBP
+          Mesa  Redacción TVN + SBP
         </span>
         <span class="ctx-item">Mapa: <strong style="color: var(--on-surface);">{{ version_banca }}</strong></span>
         <span class="ctx-sep" style="color: var(--outline-variant);">/</span>
