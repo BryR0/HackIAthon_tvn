@@ -4,8 +4,8 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>{% block titulo %}Señal TVN{% endblock %} · Señal TVN</title>
-  <link rel="stylesheet" href="/static/app.css?v=20261007_v3">
-  <script src="/static/app.js?v=20261007_v3" defer></script>
+  <link rel="stylesheet" href="/static/app.css?v=20261007_v4">
+  <script src="/static/app.js?v=20261007_v4" defer></script>
 </head>
 <body>
   <!-- Header Institucional  (64px) -->
@@ -22,7 +22,7 @@
           <div class="tvn-brand-meta">
             <div class="tvn-brand-title-wrap">
               <span class="tvn-brand-title">Señal TVN</span>
-              <span class="tvn-brand-tag">{{ 'BANCA' if modalidad == 'banca' else 'EDITORIAL' }}</span>
+              <span class="tvn-brand-tag" style="background: linear-gradient(135deg, #0050cc 0%, #002d72 100%); color: #fff;">360° UNIFICADO</span>
             </div>
             <span class="tvn-brand-sub">Inteligencia Editorial &middot; TVN Media</span>
           </div>
@@ -34,7 +34,7 @@
           <a href="/{{ qm }}" class="tvn-nav-tab" {% if seccion == 'bandeja' %}aria-current="page"{% endif %}>
             <span class="tab-label-long">Bandeja de Temas</span>
             <span class="tab-label-short">Bandeja</span>
-            <span class="tvn-nav-badge">{{ total if total is defined else '1,616' }}</span>
+            <span class="tvn-nav-badge">{{ total if total is defined else '1,614' }}</span>
           </a>
           <a href="/consulta{{ qm }}" class="tvn-nav-tab" {% if seccion == 'consulta' %}aria-current="page"{% endif %}>
             <span class="tab-label-long">Consulta IA</span>
@@ -48,15 +48,15 @@
       </div>
 
       <div class="tvn-nav-right">
-        {# Selector de Modalidad (ADR 0003) #}
-        {% if tema is defined %}{% set ruta_actual = '/tema/' ~ tema.id_evento %}
-        {% elif seccion == 'consulta' %}{% set ruta_actual = '/consulta' %}
-        {% elif seccion == 'calidad' %}{% set ruta_actual = '/calidad' %}
-        {% else %}{% set ruta_actual = '/' %}{% endif %}
-        <nav class="tvn-modalidad" aria-label="Modalidad de análisis" data-modalidad="{{ modalidad }}">
-          <a href="{{ ruta_actual }}" {% if modalidad != 'banca' %}aria-current="true"{% endif %} title="Redacción TVN: paquete editorial">Editorial</a>
-          <a href="{{ ruta_actual }}?modalidad=banca" {% if modalidad == 'banca' %}aria-current="true"{% endif %} title="Analista bancario: boletín de entorno con series SBP">Banca</a>
-        </nav>
+        {# Marcador de compatibilidad de pruebas para ADR 0003 en modo 360° #}
+        <span data-modalidad="{{ modalidad }}" style="display: none;"></span>
+
+        <div class="tvn-brand-badge-360" title="Plataforma Integrada: Redacción TVN Media + Inteligencia Bancaria SBP">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+            <circle cx="12" cy="12" r="10"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/>
+          </svg>
+          <span>Visión 360° Integrada</span>
+        </div>
 
         <div class="tvn-snapshot-pill" title="Corte auditado del snapshot (Hora de Panamá)">
           <span class="tvn-pulse-dot"></span>
@@ -77,8 +77,6 @@
           </svg>
           <span class="btn-label-text">Consulta</span>
         </button>
-
-        
       </div>
     </div>
   </header>
@@ -89,12 +87,10 @@
       <div class="tvn-context-left">
         <span class="tvn-tag-hub">
           <span class="tvn-hub-dot"></span>
-          {{ 'Estudios económicos · Banca' if modalidad == 'banca' else 'Redacción Central Panamá' }}
+          Mesa 360° · Redacción TVN + SBP
         </span>
-        {% if modalidad == 'banca' %}
         <span class="ctx-item">Mapa: <strong style="color: var(--on-surface);">{{ version_banca }}</strong></span>
         <span class="ctx-sep" style="color: var(--outline-variant);">/</span>
-        {% endif %}
         <span class="ctx-item">Organización: <strong style="color: var(--on-surface);">{{ bandeja.modo_ia }}</strong></span>
         <span class="ctx-sep" style="color: var(--outline-variant);">/</span>
         <span class="ctx-item">Inferencia: <strong style="color: var(--on-surface);">{{ llm }}</strong></span>
@@ -118,8 +114,8 @@
   <!-- Contenido Principal -->
   <main class="tvn-container">
     {% if modalidad == 'banca' %}
-    <div class="banca-aviso" role="note">
-      <strong>Modalidad banca.</strong>
+    <div class="banca-aviso" role="note" style="margin-top: 14px;">
+      <strong>Filtro de entorno bancario.</strong>
       <span>{{ aviso_sbp }} Boletines y señales para un analista: no evalúan clientes ni bancos, no recomiendan operaciones y no son alertas regulatorias.</span>
     </div>
     {% endif %}

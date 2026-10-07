@@ -27,7 +27,7 @@
     <div style="display: flex; flex-wrap: wrap; justify-content: space-between; align-items: flex-start; gap: 20px;">
       <div>
         <h1 style="font-size: 28px; line-height: 36px; font-weight: 700; color: var(--primary); margin: 4px 0 8px 0; letter-spacing: -0.015em;">
-          {{ 'Consulta del analista: boletín de entorno' if modalidad == 'banca' else 'Consulta editorial y contraste de evidencias' }}
+          Consulta IA 360° · Contraste Editorial y Entorno SBP
         </h1>
         <p style="font-size: 14px; line-height: 22px; color: var(--on-surface-variant); max-width: 820px; margin: 0;">
           Responde exclusivamente con evidencia auditada del snapshot activo. Si no existe sustento documental o estadístico verificado, el sistema se abstiene explícitamente y reporta los vacíos de información para evitar alucinaciones.
@@ -84,11 +84,9 @@
         <span style="font-size: 10px; text-transform: none; font-weight: normal;">Haz clic para autocompletar</span>
       </div>
       <div class="chips-row">
-        {% if modalidad == 'banca' %}
         <a href="/consulta?q={{ '¿Qué señales públicas del entorno logístico debo revisar?' | urlencode }}&modalidad=banca" class="chip-consulta">
-          <strong>CU-05 · Señales del entorno logístico</strong>
+          <strong>CU-05 · Señales logísticas y SBP</strong>
         </a>
-        {% endif %}
         <a href="/consulta?q=tránsitos del Canal de Panamá{{ am }}" class="chip-consulta">
           <strong>Tránsitos del Canal de Panamá</strong>
         </a>
