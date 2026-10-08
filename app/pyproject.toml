@@ -3,7 +3,7 @@ name = "senal"
 version = "0.1.0"
 description = "Señal TVN: copiloto de inteligencia informativa con evidencia trazable. Parte 2 hackIAthon."
 authors = [{ name = "BryR0" }]
-requires-python = ">=3.12,<3.13"
+requires-python = ">=3.12"
 dependencies = [
     "fastapi>=0.115",
     "uvicorn>=0.32",

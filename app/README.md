@@ -8,10 +8,19 @@ decisión humana.
 > Nada se publica automáticamente. La prioridad ordena la revisión; no es
 > probabilidad de verdad ni de pérdida. Toda afirmación cita su fuente.
 
+![Ficha de evidencia con puntaje desglosado](../docs/img/app-ficha.png)
+
 ## Arrancar en un comando
 
-Solo necesitas **Python 3.12+**. El script crea `.env`, instala dependencias,
-libera el puerto y levanta el servidor en <http://127.0.0.1:8765>.
+**Antes de la primera ejecución:**
+
+- **Python 3.12 o superior** (probado en 3.12 y 3.14).
+- **Ollama** corriendo con `llama3.2` (`ollama pull llama3.2`; <https://ollama.com/download>).
+  Es el redactor por defecto (`SENAL_LLM=ollama`). Si no responde, se usa la plantilla extractiva.
+- **Internet la primera vez**, para dependencias y el modelo de embeddings.
+
+El script crea `.env`, instala dependencias, libera el puerto y levanta el
+servidor en <http://127.0.0.1:8765>.
 
 Windows:
 
@@ -28,8 +37,8 @@ Linux / macOS:
 La primera vez descarga dependencias y el modelo de embeddings (una sola vez).
 Después funciona **sin internet** (T10).
 
-Para redactar con un LLM, edita `.env`: `GEMINI_API_KEY=...`, o deja Ollama
-corriendo con `llama3.2`. Sin LLM, los borradores salen de una plantilla
+Para usar Gemini en lugar de Ollama, edita `.env`: `SENAL_LLM=gemini` y
+`GEMINI_API_KEY=...`. Sin LLM, los borradores salen de una plantilla
 extractiva que solo copia campos citados.
 
 ## La decisión de diseño

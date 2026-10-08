@@ -1,8 +1,10 @@
 # Señal TVN &middot; Sistema de Inteligencia Editorial y Decisión
 
+![Señal TVN — De la señal a la decisión](docs/img/portada.png)
+
 [![Python 3.12+](https://img.shields.io/badge/python-3.12%2B-blue.svg)](https://www.python.org/downloads/)
 [![FastAPI](https://img.shields.io/badge/FastAPI-0.115%2B-009688.svg)](https://fastapi.tiangolo.com/)
-[![Tests](https://img.shields.io/badge/tests-176%20passed-success.svg)](app/tests)
+[![Tests](https://img.shields.io/badge/tests-177%20passed-success.svg)](app/tests)
 [![Audit](https://img.shields.io/badge/reglas-senal--1.1.0%20auditadas-0050cc.svg)](docs/notion/01-plan-y-decisiones.md)
 
 Solución integral para el **Reto TVN Media** del HackIAthon: un sistema de inteligencia editorial y análisis de señales que transforma cables noticiosos y datos públicos en **decisiones editoriales y bancarias trazables, verificadas y libres de alucinaciones**.
@@ -10,6 +12,22 @@ Solución integral para el **Reto TVN Media** del HackIAthon: un sistema de inte
 ---
 
 ## 🚀 Inicio Rápido para Evaluadores
+
+### Antes de la primera ejecución
+
+1. **Python 3.12 o superior** (probado en 3.12 y 3.14).
+2. **Ollama** con el modelo `llama3.2` para redactar borradores sin internet:
+   ```bash
+   ollama pull llama3.2
+   ```
+   Instalador: <https://ollama.com/download>. Ollama debe estar corriendo al iniciar la app.
+   Si no responde, la app sigue funcionando y redacta con una plantilla extractiva (rotulada en la interfaz).
+3. **Internet solo en la primera ejecución**: se descargan las dependencias y el modelo de
+   embeddings `multilingual-e5-small`. Después la demo funciona **sin conexión** (T10).
+
+El `.env` se crea desde `.env.example` con `SENAL_LLM=ollama`. Para usar Gemini, define `GEMINI_API_KEY` y `SENAL_LLM=gemini`.
+
+### Arranque
 
 El proyecto incluye ejecutables de arranque automático en la raíz que se encargan de configurar el entorno virtual, validar dependencias y levantar el servidor:
 
@@ -27,6 +45,29 @@ chmod +x server_start.sh
 
 > **URL de la Aplicación:** Una vez iniciado, abre tu navegador en:  
 > 🔗 **[http://127.0.0.1:8765/](http://127.0.0.1:8765/)**
+
+---
+
+## 🖥️ Vista de la Aplicación
+
+**Bandeja de temas:** 1.614 eventos agrupados y ordenados por un puntaje explicable.
+
+![Bandeja de temas priorizada](docs/img/app-bandeja.png)
+
+**Ficha de evidencia:** desglose del puntaje, quién lo reporta, qué está respaldado y contexto oficial citado.
+
+![Ficha de evidencia con puntaje desglosado](docs/img/app-ficha.png)
+
+<table>
+<tr>
+<td width="50%"><b>Abstención:</b> sin evidencia en el corpus, no inventa cifras ni citas.<br><img src="docs/img/app-abstencion.png" alt="Consulta con abstención"></td>
+<td width="50%"><b>Modalidad Banca (CU-05):</b> boletín de entorno con series SBP citadas.<br><img src="docs/img/app-banca.png" alt="Boletín de entorno bancario"></td>
+</tr>
+</table>
+
+**Priorización explicable:** el puntaje decide el orden, no el LLM.
+
+![Fórmula de prioridad P = 30R + 25I + 20U + 15N + 10E](docs/img/puntaje.png)
 
 ---
 
@@ -52,7 +93,7 @@ HackIAthon_tvn/
 ├── app/                   # Aplicación pura (FastAPI + Jinja + UI + Motor IA)
 │   ├── src/senal/         # Núcleo: ingestión, clustering, scoring, citas, RAG, web
 │   ├── data/              # Snapshot auditado: GDELT, Banco Mundial, USGS, INEC, SBP
-│   ├── tests/             # 176 pruebas automatizadas (unitarias, web y contratos)
+│   ├── tests/             # 177 pruebas automatizadas (unitarias, web y contratos)
 │   ├── evals/             # Benchmarks de triage y extensión bancaria
 │   ├── pyproject.toml     # Especificación de proyecto Python moderno
 │   └── requirements.txt   # Dependencias fijadas
@@ -99,7 +140,7 @@ La plataforma cuenta con un conmutador de modalidad en el header superior:
 
 ## 🧪 Pruebas Automatizadas
 
-Para validar los 176 tests de contratos, lógica, RAG y seguridad:
+Para validar los 177 tests de contratos, lógica, RAG y seguridad:
 
 ```bash
 cd app
@@ -109,7 +150,7 @@ pytest tests
 ```
 
 **Resultado:**
-- `176 passed` en menos de 7 segundos.
+- `177 passed` en menos de 10 segundos.
 - Verificación exhaustiva de abstención ante alucinaciones, CSRF, validación de corte temporal, scoring y contratos de datos.
 
 ---
